@@ -8,9 +8,7 @@ A solução gerencia o fluxo de atendimento social da NuvemTech/Turma do Bem, pe
 
 ## O que foi ajustado
 
-- O projeto foi montado usando a base Quarkus do professor como padrão de estrutura.
-- O código de Aluno foi removido da solução final, pois era apenas base de exemplo.
-- Os dados fixos foram retirados do código.
+- O projeto foi montado usando a base Quarkus como padrão de estrutura.
 - Datas, telefone, senha, integrante e dentista agora vêm pelo JSON ou são definidos por regra de negócio quando fizer sentido.
 - A API REST foi criada para as classes principais do projeto.
 - Foram criadas camadas entities, dao, bo, resources, exceptions e conexoes.
