@@ -1,0 +1,50 @@
+package br.com.nuvemtech.resources;
+
+import br.com.nuvemtech.services.PatrocinadorService;
+import br.com.nuvemtech.entities.Patrocinador;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.*;
+
+import java.sql.SQLException;
+import java.util.List;
+
+@Path("/patrocinadores")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public class PatrocinadorResource {
+    private final PatrocinadorService service = new PatrocinadorService();
+
+    @GET
+    public List<Patrocinador> selecionar() throws SQLException, ClassNotFoundException {
+        return service.selecionar();
+    }
+
+    @GET
+    @Path("/{id}")
+    public Patrocinador buscarPorId(@PathParam("id") int id) throws SQLException, ClassNotFoundException {
+        return service.buscarPorId(id);
+    }
+
+    @POST
+    public Response inserir(Patrocinador obj, @Context UriInfo uriInfo) throws SQLException, ClassNotFoundException {
+        service.inserir(obj);
+        UriBuilder builder = uriInfo.getAbsolutePathBuilder();
+        builder.path(Integer.toString(obj.getIdPatrocinador()));
+        return Response.created(builder.build()).entity(obj).build();
+    }
+
+    @PUT
+    @Path("/{id}")
+    public Response atualizar(@PathParam("id") int id, Patrocinador obj) throws SQLException, ClassNotFoundException {
+        obj.setIdPatrocinador(id);
+        service.atualizar(obj);
+        return Response.ok(obj).build();
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Response deletar(@PathParam("id") int id) throws SQLException, ClassNotFoundException {
+        service.deletar(id);
+        return Response.noContent().build();
+    }
+}
