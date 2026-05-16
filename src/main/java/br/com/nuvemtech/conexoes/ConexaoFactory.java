@@ -7,17 +7,22 @@ import java.sql.SQLException;
 
 public class ConexaoFactory {
 
-    // metodo de conexão com o banco de dados
-    public Connection conexao() throws ClassNotFoundException, SQLException {
+    public static Connection conexao() throws SQLException, ClassNotFoundException {
 
-        // Driver oracle
         Class.forName("oracle.jdbc.driver.OracleDriver");
 
-        // Retornar conexão
-        return DriverManager.getConnection(
-                System.getenv("DB_URL"),
-                System.getenv("DB_USER"),
-                System.getenv("DB_PASSWORD")
-        );
+        String url = System.getenv("DB_URL");
+        String user = System.getenv("DB_USER");
+        String password = System.getenv("DB_PASSWORD");
+
+        // Se estiver local e não tiver variável de ambiente
+        if (url == null || user == null || password == null) {
+
+            url = "jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL";
+            user = "rm567265";
+            password = "290406";
+        }
+
+        return DriverManager.getConnection(url, user, password);
     }
 }
