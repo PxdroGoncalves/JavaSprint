@@ -95,12 +95,12 @@ public class DiagnosticoBO {
                     "Caso obrigatorio.");
         }
 
-        if (d.getBeneficiario() == null ||
-                d.getBeneficiario()
-                        .getIdBeneficiario() <= 0) {
+        if (d.getDentista() == null ||
+                d.getDentista()
+                        .getIdDentista() <= 0) {
 
             throw new RegraNegocioException(
-                    "Beneficiario obrigatorio.");
+                    "Dentista obrigatorio.");
         }
     }
 

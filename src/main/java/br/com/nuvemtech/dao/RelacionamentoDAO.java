@@ -84,7 +84,6 @@ public class RelacionamentoDAO {
                 p.setNome(rs.getString("nm_patr"));
                 p.setEmail(rs.getString("email_patr"));
                 p.setAnonimo(rs.getString("anonimo"));
-                // CORRIGIDO: removida leitura de "documento" que não existe na tabela
                 return p;
             }
         }
