@@ -10,33 +10,23 @@ public class DiagnosticoService {
 
     private final DiagnosticoBO bo = new DiagnosticoBO();
 
-    public List<Diagnostico> selecionar()
-            throws SQLException, ClassNotFoundException {
-
+    public List<Diagnostico> selecionar() throws SQLException, ClassNotFoundException {
         return bo.listarTodosBo();
     }
 
-    public Diagnostico buscarPorId(int id)
-            throws SQLException, ClassNotFoundException {
-
+    public Diagnostico buscarPorId(int id) throws SQLException, ClassNotFoundException {
         return bo.buscarPorIdBo(id);
     }
 
-    public void inserir(Diagnostico obj)
-            throws SQLException, ClassNotFoundException {
-
+    public void inserir(Diagnostico obj) throws SQLException, ClassNotFoundException {
         bo.inserirBo(obj);
     }
 
-    public void atualizar(Diagnostico obj)
-            throws SQLException, ClassNotFoundException {
-
+    public void atualizar(Diagnostico obj) throws SQLException, ClassNotFoundException {
         bo.atualizarBo(obj);
     }
 
-    public void deletar(int id)
-            throws SQLException, ClassNotFoundException {
-
+    public void deletar(int id) throws SQLException, ClassNotFoundException {
         bo.deletarBo(id);
     }
 }

@@ -24,7 +24,7 @@ public class DiagnosticoDAO {
             if (rs.next()) novoId = rs.getInt(1);
         }
 
-        String sql = "INSERT INTO diagnostico (id_diag, dt_diag, ds_diagnostico, ds_procedimento, fk_caso_id_caso, fk_dentista_id_dent) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO diagnostico (id_diag, dt_diag, ds_diagnostico, ds_procedimento, fk_caso_id_caso, fk_beneficiario_id_bene) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -34,20 +34,22 @@ public class DiagnosticoDAO {
             stmt.setString(3, d.getDescricao());
             stmt.setString(4, d.getProcedimento());
             stmt.setInt(5, d.getCaso().getIdCaso());
-            stmt.setInt(6, d.getDentista().getIdDentista());
+            stmt.setInt(6, d.getBeneficiario().getIdBeneficiario());
             stmt.executeUpdate();
         }
     }
 
     public void atualizar(Diagnostico d) throws SQLException, ClassNotFoundException {
-        String sql = "UPDATE diagnostico SET dt_diag=?, ds_diagnostico=?, ds_procedimento=?, fk_caso_id_caso=?, fk_dentista_id_dent=? WHERE id_diag=?";
+        String sql = "UPDATE diagnostico SET dt_diag=?, ds_diagnostico=?, ds_procedimento=?, fk_caso_id_caso=?, fk_beneficiario_id_bene=? WHERE id_diag=?";
+
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
             stmt.setDate(1, Date.valueOf(d.getDataDiagnostico()));
             stmt.setString(2, d.getDescricao());
             stmt.setString(3, d.getProcedimento());
             stmt.setInt(4, d.getCaso().getIdCaso());
-            stmt.setInt(5, d.getDentista().getIdDentista());
+            stmt.setInt(5, d.getBeneficiario().getIdBeneficiario());
             stmt.setInt(6, d.getIdDiagnostico());
             stmt.executeUpdate();
         }
@@ -56,6 +58,7 @@ public class DiagnosticoDAO {
     public void deletar(int id) throws SQLException, ClassNotFoundException {
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement("DELETE FROM diagnostico WHERE id_diag=?")) {
+
             stmt.setInt(1, id);
             stmt.executeUpdate();
         }
@@ -64,7 +67,9 @@ public class DiagnosticoDAO {
     public Diagnostico buscarPorId(int id) throws SQLException, ClassNotFoundException {
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement("SELECT * FROM diagnostico WHERE id_diag=?")) {
+
             stmt.setInt(1, id);
+
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) return montar(conexao, rs);
                 return null;
@@ -74,28 +79,22 @@ public class DiagnosticoDAO {
 
     public List<Diagnostico> selecionar() throws SQLException, ClassNotFoundException {
         List<Diagnostico> lista = new ArrayList<>();
+
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement("SELECT * FROM diagnostico ORDER BY id_diag");
              ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) lista.add(montar(conexao, rs));
-        }
-        return lista;
-    }
 
-    public boolean existePorCaso(int idCaso) throws SQLException, ClassNotFoundException {
-        String sql = "SELECT COUNT(*) FROM diagnostico WHERE fk_caso_id_caso = ?";
-        try (Connection conexao = abrirConexao();
-             PreparedStatement stmt = conexao.prepareStatement(sql)) {
-            stmt.setInt(1, idCaso);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) return rs.getInt(1) > 0;
+            while (rs.next()) {
+                lista.add(montar(conexao, rs));
             }
         }
-        return false;
+
+        return lista;
     }
 
     private Diagnostico montar(Connection conexao, ResultSet rs) throws SQLException {
         Diagnostico d = new Diagnostico();
+
         d.setIdDiagnostico(rs.getInt("id_diag"));
         d.setDescricao(rs.getString("ds_diagnostico"));
         d.setProcedimento(rs.getString("ds_procedimento"));
@@ -103,8 +102,19 @@ public class DiagnosticoDAO {
         Date data = rs.getDate("dt_diag");
         if (data != null) d.setDataDiagnostico(data.toLocalDate());
 
-        d.setCaso(RelacionamentoDAO.buscarCaso(conexao, rs.getInt("fk_caso_id_caso")));
-        d.setDentista(RelacionamentoDAO.buscarDentista(conexao, rs.getInt("fk_dentista_id_dent")));
+        d.setCaso(
+                RelacionamentoDAO.buscarCaso(
+                        conexao,
+                        rs.getInt("fk_caso_id_caso")
+                )
+        );
+
+        d.setBeneficiario(
+                RelacionamentoDAO.buscarBeneficiario(
+                        conexao,
+                        rs.getInt("fk_beneficiario_id_bene")
+                )
+        );
 
         return d;
     }

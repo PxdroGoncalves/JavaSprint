@@ -12,8 +12,7 @@ import java.util.List;
 
 public class DiagnosticoBO {
 
-    public void inserirBo(Diagnostico d)
-            throws SQLException, ClassNotFoundException {
+    public void inserirBo(Diagnostico d) throws SQLException, ClassNotFoundException {
 
         validarInsercao(d);
 
@@ -24,9 +23,7 @@ public class DiagnosticoBO {
         new DiagnosticoDAO().inserir(d);
 
         CasoDAO casoDAO = new CasoDAO();
-        Caso caso =
-                casoDAO.buscarPorId(
-                        d.getCaso().getIdCaso());
+        Caso caso = casoDAO.buscarPorId(d.getCaso().getIdCaso());
 
         if (caso != null) {
             caso.registrarDiagnostico();
@@ -34,8 +31,7 @@ public class DiagnosticoBO {
         }
     }
 
-    public void atualizarBo(Diagnostico d)
-            throws SQLException, ClassNotFoundException {
+    public void atualizarBo(Diagnostico d) throws SQLException, ClassNotFoundException {
 
         validarAtualizacao(d);
 
@@ -46,73 +42,55 @@ public class DiagnosticoBO {
         new DiagnosticoDAO().atualizar(d);
     }
 
-    public void deletarBo(int id)
-            throws SQLException, ClassNotFoundException {
+    public void deletarBo(int id) throws SQLException, ClassNotFoundException {
 
         if (id <= 0) {
-            throw new RegraNegocioException(
-                    "ID do diagnostico invalido.");
+            throw new RegraNegocioException("ID do diagnostico invalido.");
         }
 
         new DiagnosticoDAO().deletar(id);
     }
 
-    public Diagnostico buscarPorIdBo(int id)
-            throws SQLException, ClassNotFoundException {
+    public Diagnostico buscarPorIdBo(int id) throws SQLException, ClassNotFoundException {
 
         if (id <= 0) {
-            throw new RegraNegocioException(
-                    "ID do diagnostico invalido.");
+            throw new RegraNegocioException("ID do diagnostico invalido.");
         }
 
         return new DiagnosticoDAO().buscarPorId(id);
     }
 
-    public List<Diagnostico> listarTodosBo()
-            throws SQLException, ClassNotFoundException {
-
+    public List<Diagnostico> listarTodosBo() throws SQLException, ClassNotFoundException {
         return new DiagnosticoDAO().selecionar();
     }
 
     private void validarInsercao(Diagnostico d) {
 
         if (d == null) {
-            throw new RegraNegocioException(
-                    "Dados do diagnostico nao informados.");
+            throw new RegraNegocioException("Dados do diagnostico nao informados.");
         }
 
-        if (d.getDescricao() == null ||
-                d.getDescricao().isBlank()) {
-
-            throw new RegraNegocioException(
-                    "Descricao obrigatoria.");
+        if (d.getDescricao() == null || d.getDescricao().isBlank()) {
+            throw new RegraNegocioException("Descricao obrigatoria.");
         }
 
-        if (d.getCaso() == null ||
-                d.getCaso().getIdCaso() <= 0) {
-
-            throw new RegraNegocioException(
-                    "Caso obrigatorio.");
+        if (d.getCaso() == null || d.getCaso().getIdCaso() <= 0) {
+            throw new RegraNegocioException("Caso obrigatorio.");
         }
 
-        if (d.getDentista() == null ||
-                d.getDentista()
-                        .getIdDentista() <= 0) {
+        if (d.getBeneficiario() == null ||
+                d.getBeneficiario().getIdBeneficiario() <= 0) {
 
-            throw new RegraNegocioException(
-                    "Dentista obrigatorio.");
+            throw new RegraNegocioException("Beneficiario obrigatorio.");
         }
     }
 
-    private void validarAtualizacao(
-            Diagnostico d) {
+    private void validarAtualizacao(Diagnostico d) {
 
         validarInsercao(d);
 
         if (d.getIdDiagnostico() <= 0) {
-
-            throw new RegraNegocioException(
-                    "ID do diagnostico invalido.");
+            throw new RegraNegocioException("ID do diagnostico invalido.");
         }
     }
 }
