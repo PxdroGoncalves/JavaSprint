@@ -14,18 +14,41 @@ public class CasoDAO {
     }
 
     public void inserir(Caso c) throws SQLException, ClassNotFoundException {
+
+        int novoId = 1;
+
+        try (Connection conexao = abrirConexao();
+             PreparedStatement stmtId = conexao.prepareStatement("SELECT NVL(MAX(id_caso),0)+1 FROM caso");
+             ResultSet rs = stmtId.executeQuery()) {
+
+            if (rs.next()) novoId = rs.getInt(1);
+        }
+
         String sql = "INSERT INTO caso (id_caso, dt_abertura, dt_fechamento, st_caso, fk_beneficiario_id_bene, fk_dentista_id_dent, fk_integrante_id_integ) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
-            stmt.setInt(1, c.getIdCaso());
+
+            stmt.setInt(1, novoId);
             stmt.setDate(2, Date.valueOf(c.getDataAbertura()));
-            if (c.getDataFechamento() == null) stmt.setNull(3, Types.DATE);
-            else stmt.setDate(3, Date.valueOf(c.getDataFechamento()));
+
+            if (c.getDataFechamento() == null) {
+                stmt.setNull(3, Types.DATE);
+            } else {
+                stmt.setDate(3, Date.valueOf(c.getDataFechamento()));
+            }
+
             stmt.setString(4, c.getStatus());
             stmt.setInt(5, c.getBeneficiario().getIdBeneficiario());
-            if (c.getDentista() == null || c.getDentista().getIdDentista() == 0) stmt.setNull(6, Types.INTEGER);
-            else stmt.setInt(6, c.getDentista().getIdDentista());
+
+            if (c.getDentista() == null || c.getDentista().getIdDentista() == 0) {
+                stmt.setNull(6, Types.INTEGER);
+            } else {
+                stmt.setInt(6, c.getDentista().getIdDentista());
+            }
+
             stmt.setInt(7, c.getIntegrante().getIdIntegrante());
+
             stmt.executeUpdate();
         }
     }
@@ -35,14 +58,22 @@ public class CasoDAO {
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setDate(1, Date.valueOf(c.getDataAbertura()));
+
             if (c.getDataFechamento() == null) stmt.setNull(2, Types.DATE);
             else stmt.setDate(2, Date.valueOf(c.getDataFechamento()));
+
             stmt.setString(3, c.getStatus());
             stmt.setInt(4, c.getBeneficiario().getIdBeneficiario());
-            if (c.getDentista() == null || c.getDentista().getIdDentista() == 0) stmt.setNull(5, Types.INTEGER);
-            else stmt.setInt(5, c.getDentista().getIdDentista());
+
+            if (c.getDentista() == null || c.getDentista().getIdDentista() == 0) {
+                stmt.setNull(5, Types.INTEGER);
+            } else {
+                stmt.setInt(5, c.getDentista().getIdDentista());
+            }
+
             stmt.setInt(6, c.getIntegrante().getIdIntegrante());
             stmt.setInt(7, c.getIdCaso());
+
             stmt.executeUpdate();
         }
     }
@@ -80,12 +111,20 @@ public class CasoDAO {
         String sql = "UPDATE caso SET st_caso=?, dt_fechamento=?, fk_dentista_id_dent=? WHERE id_caso=?";
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
             stmt.setString(1, c.getStatus());
+
             if (c.getDataFechamento() == null) stmt.setNull(2, Types.DATE);
             else stmt.setDate(2, Date.valueOf(c.getDataFechamento()));
-            if (c.getDentista() == null || c.getDentista().getIdDentista() == 0) stmt.setNull(3, Types.INTEGER);
-            else stmt.setInt(3, c.getDentista().getIdDentista());
+
+            if (c.getDentista() == null || c.getDentista().getIdDentista() == 0) {
+                stmt.setNull(3, Types.INTEGER);
+            } else {
+                stmt.setInt(3, c.getDentista().getIdDentista());
+            }
+
             stmt.setInt(4, c.getIdCaso());
+
             stmt.executeUpdate();
         }
     }

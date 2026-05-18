@@ -14,28 +14,40 @@ public class DiagnosticoDAO {
     }
 
     public void inserir(Diagnostico d) throws SQLException, ClassNotFoundException {
-        String sql = "INSERT INTO diagnostico (id_diag, dt_diag, ds_diagnostico, ds_procedimento, fk_caso_id_caso, fk_beneficiario_id_bene) VALUES (?, ?, ?, ?, ?, ?)";
+
+        int novoId = 1;
+
+        try (Connection conexao = abrirConexao();
+             PreparedStatement stmtId = conexao.prepareStatement("SELECT NVL(MAX(id_diag),0)+1 FROM diagnostico");
+             ResultSet rs = stmtId.executeQuery()) {
+
+            if (rs.next()) novoId = rs.getInt(1);
+        }
+
+        String sql = "INSERT INTO diagnostico (id_diag, dt_diag, ds_diagnostico, ds_procedimento, fk_caso_id_caso, fk_dentista_id_dent) VALUES (?, ?, ?, ?, ?, ?)";
+
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
-            stmt.setInt(1, d.getIdDiagnostico());
+
+            stmt.setInt(1, novoId);
             stmt.setDate(2, Date.valueOf(d.getDataDiagnostico()));
             stmt.setString(3, d.getDescricao());
             stmt.setString(4, d.getProcedimento());
             stmt.setInt(5, d.getCaso().getIdCaso());
-            stmt.setInt(6, d.getBeneficiario().getIdBeneficiario());
+            stmt.setInt(6, d.getDentista().getIdDentista());
             stmt.executeUpdate();
         }
     }
 
     public void atualizar(Diagnostico d) throws SQLException, ClassNotFoundException {
-        String sql = "UPDATE diagnostico SET dt_diag=?, ds_diagnostico=?, ds_procedimento=?,fk_caso_id_caso=?, fk_beneficiario_id_bene=? WHERE id_diag=?";
+        String sql = "UPDATE diagnostico SET dt_diag=?, ds_diagnostico=?, ds_procedimento=?, fk_caso_id_caso=?, fk_dentista_id_dent=? WHERE id_diag=?";
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setDate(1, Date.valueOf(d.getDataDiagnostico()));
             stmt.setString(2, d.getDescricao());
             stmt.setString(3, d.getProcedimento());
             stmt.setInt(4, d.getCaso().getIdCaso());
-            stmt.setInt(5, d.getBeneficiario().getIdBeneficiario());
+            stmt.setInt(5, d.getDentista().getIdDentista());
             stmt.setInt(6, d.getIdDiagnostico());
             stmt.executeUpdate();
         }
@@ -87,10 +99,13 @@ public class DiagnosticoDAO {
         d.setIdDiagnostico(rs.getInt("id_diag"));
         d.setDescricao(rs.getString("ds_diagnostico"));
         d.setProcedimento(rs.getString("ds_procedimento"));
+
         Date data = rs.getDate("dt_diag");
         if (data != null) d.setDataDiagnostico(data.toLocalDate());
+
         d.setCaso(RelacionamentoDAO.buscarCaso(conexao, rs.getInt("fk_caso_id_caso")));
-        d.setBeneficiario(RelacionamentoDAO.buscarBeneficiario(conexao, rs.getInt("fk_beneficiario_id_bene")));
+        d.setDentista(RelacionamentoDAO.buscarDentista(conexao, rs.getInt("fk_dentista_id_dent")));
+
         return d;
     }
 }
