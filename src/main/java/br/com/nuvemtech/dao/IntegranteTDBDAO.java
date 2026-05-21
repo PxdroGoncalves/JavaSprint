@@ -40,7 +40,7 @@ public class IntegranteTDBDAO {
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, novoId);
             stmt.setString(2, i.getNome());
-            stmt.setString(3, i.getEmail());
+            stmt.setString(3, i.getEmail().toLowerCase());
             stmt.setString(4, i.getCargo());
             stmt.setDate(5, Date.valueOf(i.getDataCadastro() != null ? i.getDataCadastro() : java.time.LocalDate.now()));
             stmt.setString(6, i.getSenha());

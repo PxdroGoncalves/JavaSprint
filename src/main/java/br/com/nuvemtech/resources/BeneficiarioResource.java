@@ -1,5 +1,6 @@
 package br.com.nuvemtech.resources;
 
+import br.com.nuvemtech.dto.CadastroBeneficiarioRequest;
 import br.com.nuvemtech.dto.LoginRequest;
 import br.com.nuvemtech.services.BeneficiarioService;
 import br.com.nuvemtech.entities.Beneficiario;
@@ -37,7 +38,15 @@ public class BeneficiarioResource {
 
     @POST
     @Path("/cadastrar")
-    public Response cadastrar(Beneficiario obj) throws SQLException, ClassNotFoundException {
+    public Response cadastrar(CadastroBeneficiarioRequest req) throws SQLException, ClassNotFoundException {
+        Beneficiario obj = new Beneficiario();
+        obj.setNome(req.getNome());
+        obj.setEmail(req.getEmail());
+        obj.setSenha(req.getSenha());
+        obj.setCpf(req.getCpf());
+        obj.setDataNascimento(req.getDataNascimento());
+        obj.setTelefone(req.getTelefone());
+        obj.setEndereco(req.getEndereco());
         service.cadastrar(obj);
         return Response.status(Response.Status.CREATED).entity(obj).build();
     }

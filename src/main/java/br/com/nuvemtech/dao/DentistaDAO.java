@@ -44,7 +44,7 @@ public class DentistaDAO {
             stmt.setString(2, d.getNome());
             stmt.setString(3, d.getCro());
             stmt.setString(4, d.getEspecialidade());
-            stmt.setString(5, d.getEmail());
+            stmt.setString(5, d.getEmail().toLowerCase());
             stmt.setString(6, d.getTelefone());
             stmt.setDate(7, Date.valueOf(d.getDataCadastro() != null ? d.getDataCadastro() : java.time.LocalDate.now()));
             stmt.setString(8, d.getSenha());

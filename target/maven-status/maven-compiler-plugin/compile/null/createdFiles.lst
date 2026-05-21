@@ -1,5 +1,6 @@
 br\com\nuvemtech\exceptions\NotFoundException.class
 br\com\nuvemtech\main\TesteConexao.class
+br\com\nuvemtech\dto\LoginRequest.class
 br\com\nuvemtech\resources\EvidenciaResource.class
 br\com\nuvemtech\bo\DentistaBO.class
 br\com\nuvemtech\resources\DentistaResource.class
@@ -9,9 +10,9 @@ br\com\nuvemtech\main\TesteBeneficiario.class
 br\com\nuvemtech\main\TesteDentista.class
 br\com\nuvemtech\bo\IntegranteTDBBO.class
 br\com\nuvemtech\dao\EvidenciaDAO.class
+br\com\nuvemtech\dto\CadastroDentistaRequest.class
 br\com\nuvemtech\resources\DiagnosticoResource.class
 br\com\nuvemtech\bo\CasoBO.class
-br\com\nuvemtech\entities\LoginRequest.class
 br\com\nuvemtech\services\DoacaoService.class
 br\com\nuvemtech\entities\Beneficiario.class
 br\com\nuvemtech\dao\DoacaoDAO.class
@@ -20,6 +21,7 @@ br\com\nuvemtech\resources\MensagemResource.class
 br\com\nuvemtech\entities\IntegranteTDB.class
 br\com\nuvemtech\services\ViaCepService.class
 br\com\nuvemtech\resources\CasoResource.class
+br\com\nuvemtech\dto\CadastroIntegranteRequest.class
 br\com\nuvemtech\entities\Evidencia.class
 br\com\nuvemtech\entities\Pessoa.class
 br\com\nuvemtech\dao\PedidoEncaminhamentoDAO.class
@@ -62,7 +64,9 @@ br\com\nuvemtech\resources\HomeResource.class
 br\com\nuvemtech\entities\Caso.class
 br\com\nuvemtech\main\EntradaDados.class
 br\com\nuvemtech\resources\BeneficiarioResource.class
+br\com\nuvemtech\dto\CadastroBeneficiarioRequest.class
 br\com\nuvemtech\resources\HistoricoStatusResource.class
+br\com\nuvemtech\dto\CadastroPatrocinadorRequest.class
 br\com\nuvemtech\entities\Patrocinador.class
 br\com\nuvemtech\dao\DentistaDAO.class
 br\com\nuvemtech\entities\Doacao.class

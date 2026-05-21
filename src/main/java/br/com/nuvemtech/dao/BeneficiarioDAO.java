@@ -45,7 +45,7 @@ public class BeneficiarioDAO {
             stmt.setString(2, b.getNome());
             stmt.setString(3, b.getCpf());
             stmt.setDate(4, b.getDataNascimento() != null ? Date.valueOf(b.getDataNascimento()) : null);
-            stmt.setString(5, b.getEmail());
+            stmt.setString(5, b.getEmail().toLowerCase());
             stmt.setString(6, b.getTelefone());
             stmt.setString(7, b.getEndereco());
             stmt.setDate(8, Date.valueOf(b.getDataCadastro() != null ? b.getDataCadastro() : java.time.LocalDate.now()));

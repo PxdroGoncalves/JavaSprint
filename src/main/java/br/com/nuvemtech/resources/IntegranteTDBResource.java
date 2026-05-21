@@ -1,5 +1,6 @@
 package br.com.nuvemtech.resources;
 
+import br.com.nuvemtech.dto.CadastroIntegranteRequest;
 import br.com.nuvemtech.dto.LoginRequest;
 import br.com.nuvemtech.services.IntegranteTDBService;
 import br.com.nuvemtech.entities.IntegranteTDB;
@@ -37,7 +38,12 @@ public class IntegranteTDBResource {
 
     @POST
     @Path("/cadastrar")
-    public Response cadastrar(IntegranteTDB obj) throws SQLException, ClassNotFoundException {
+    public Response cadastrar(CadastroIntegranteRequest req) throws SQLException, ClassNotFoundException {
+        IntegranteTDB obj = new IntegranteTDB();
+        obj.setNome(req.getNome());
+        obj.setEmail(req.getEmail());
+        obj.setSenha(req.getSenha());
+        obj.setCargo(req.getCargo());
         service.cadastrar(obj);
         return Response.status(Response.Status.CREATED).entity(obj).build();
     }

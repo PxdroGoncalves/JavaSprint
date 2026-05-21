@@ -22,6 +22,11 @@ C:\Users\pedro\Desktop\Faculdade\Java\Sprint4Java\NuvemTechSprint\src\main\java\
 C:\Users\pedro\Desktop\Faculdade\Java\Sprint4Java\NuvemTechSprint\src\main\java\br\com\nuvemtech\dao\PatrocinadorDAO.java
 C:\Users\pedro\Desktop\Faculdade\Java\Sprint4Java\NuvemTechSprint\src\main\java\br\com\nuvemtech\dao\PedidoEncaminhamentoDAO.java
 C:\Users\pedro\Desktop\Faculdade\Java\Sprint4Java\NuvemTechSprint\src\main\java\br\com\nuvemtech\dao\RelacionamentoDAO.java
+C:\Users\pedro\Desktop\Faculdade\Java\Sprint4Java\NuvemTechSprint\src\main\java\br\com\nuvemtech\dto\CadastroBeneficiarioRequest.java
+C:\Users\pedro\Desktop\Faculdade\Java\Sprint4Java\NuvemTechSprint\src\main\java\br\com\nuvemtech\dto\CadastroDentistaRequest.java
+C:\Users\pedro\Desktop\Faculdade\Java\Sprint4Java\NuvemTechSprint\src\main\java\br\com\nuvemtech\dto\CadastroIntegranteRequest.java
+C:\Users\pedro\Desktop\Faculdade\Java\Sprint4Java\NuvemTechSprint\src\main\java\br\com\nuvemtech\dto\CadastroPatrocinadorRequest.java
+C:\Users\pedro\Desktop\Faculdade\Java\Sprint4Java\NuvemTechSprint\src\main\java\br\com\nuvemtech\dto\LoginRequest.java
 C:\Users\pedro\Desktop\Faculdade\Java\Sprint4Java\NuvemTechSprint\src\main\java\br\com\nuvemtech\entities\Beneficiario.java
 C:\Users\pedro\Desktop\Faculdade\Java\Sprint4Java\NuvemTechSprint\src\main\java\br\com\nuvemtech\entities\Caso.java
 C:\Users\pedro\Desktop\Faculdade\Java\Sprint4Java\NuvemTechSprint\src\main\java\br\com\nuvemtech\entities\Dentista.java
@@ -31,7 +36,6 @@ C:\Users\pedro\Desktop\Faculdade\Java\Sprint4Java\NuvemTechSprint\src\main\java\
 C:\Users\pedro\Desktop\Faculdade\Java\Sprint4Java\NuvemTechSprint\src\main\java\br\com\nuvemtech\entities\Evidencia.java
 C:\Users\pedro\Desktop\Faculdade\Java\Sprint4Java\NuvemTechSprint\src\main\java\br\com\nuvemtech\entities\HistoricoStatus.java
 C:\Users\pedro\Desktop\Faculdade\Java\Sprint4Java\NuvemTechSprint\src\main\java\br\com\nuvemtech\entities\IntegranteTDB.java
-C:\Users\pedro\Desktop\Faculdade\Java\Sprint4Java\NuvemTechSprint\src\main\java\br\com\nuvemtech\entities\LoginRequest.java
 C:\Users\pedro\Desktop\Faculdade\Java\Sprint4Java\NuvemTechSprint\src\main\java\br\com\nuvemtech\entities\Mensagem.java
 C:\Users\pedro\Desktop\Faculdade\Java\Sprint4Java\NuvemTechSprint\src\main\java\br\com\nuvemtech\entities\Patrocinador.java
 C:\Users\pedro\Desktop\Faculdade\Java\Sprint4Java\NuvemTechSprint\src\main\java\br\com\nuvemtech\entities\PedidoEncaminhamento.java

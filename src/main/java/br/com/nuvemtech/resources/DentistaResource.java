@@ -1,5 +1,6 @@
 package br.com.nuvemtech.resources;
 
+import br.com.nuvemtech.dto.CadastroDentistaRequest;
 import br.com.nuvemtech.dto.LoginRequest;
 import br.com.nuvemtech.services.DentistaService;
 import br.com.nuvemtech.entities.Dentista;
@@ -37,7 +38,14 @@ public class DentistaResource {
 
     @POST
     @Path("/cadastrar")
-    public Response cadastrar(Dentista obj) throws SQLException, ClassNotFoundException {
+    public Response cadastrar(CadastroDentistaRequest req) throws SQLException, ClassNotFoundException {
+        Dentista obj = new Dentista();
+        obj.setNome(req.getNome());
+        obj.setEmail(req.getEmail());
+        obj.setSenha(req.getSenha());
+        obj.setCro(req.getCro());
+        obj.setEspecialidade(req.getEspecialidade());
+        obj.setTelefone(req.getTelefone());
         service.cadastrar(obj);
         return Response.status(Response.Status.CREATED).entity(obj).build();
     }
