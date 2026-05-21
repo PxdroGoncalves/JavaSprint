@@ -1,6 +1,7 @@
 package br.com.nuvemtech.entities;
 
 import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Dentista extends Pessoa {
     private int idDentista;
@@ -32,6 +33,7 @@ public class Dentista extends Pessoa {
     public void setTelefone(String telefone) { this.telefone = telefone; }
     public LocalDate getDataCadastro() { return dataCadastro; }
     public void setDataCadastro(LocalDate dataCadastro) { this.dataCadastro = dataCadastro; }
+    @JsonIgnore
     public String getSenha() { return senha; }
     public void setSenha(String senha) { this.senha = senha; }
 

@@ -15,8 +15,7 @@ public class DentistaDAO {
 
     public void inserir(Dentista d) throws SQLException, ClassNotFoundException {
         String sql = "INSERT INTO dentista (id_dent, nm_dent, cro_dent, especialidade, email_dent, telefone_dent, dt_cadastro, senha_dent) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conexao = abrirConexao();
-             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+        try (Connection conexao = abrirConexao(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, d.getIdDentista());
             stmt.setString(2, d.getNome());
             stmt.setString(3, d.getCro());
@@ -31,8 +30,7 @@ public class DentistaDAO {
 
     public void atualizar(Dentista d) throws SQLException, ClassNotFoundException {
         String sql = "UPDATE dentista SET nm_dent=?, cro_dent=?, especialidade=?, email_dent=?, telefone_dent=?, dt_cadastro=?, senha_dent=? WHERE id_dent=?";
-        try (Connection conexao = abrirConexao();
-             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+        try (Connection conexao = abrirConexao(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setString(1, d.getNome());
             stmt.setString(2, d.getCro());
             stmt.setString(3, d.getEspecialidade());
@@ -46,16 +44,14 @@ public class DentistaDAO {
     }
 
     public void deletar(int id) throws SQLException, ClassNotFoundException {
-        try (Connection conexao = abrirConexao();
-             PreparedStatement stmt = conexao.prepareStatement("DELETE FROM dentista WHERE id_dent=?")) {
+        try (Connection conexao = abrirConexao(); PreparedStatement stmt = conexao.prepareStatement("DELETE FROM dentista WHERE id_dent=?")) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         }
     }
 
     public Dentista buscarPorId(int id) throws SQLException, ClassNotFoundException {
-        try (Connection conexao = abrirConexao();
-             PreparedStatement stmt = conexao.prepareStatement("SELECT * FROM dentista WHERE id_dent=?")) {
+        try (Connection conexao = abrirConexao(); PreparedStatement stmt = conexao.prepareStatement("SELECT * FROM dentista WHERE id_dent=?")) {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) return montar(rs);
@@ -66,12 +62,43 @@ public class DentistaDAO {
 
     public List<Dentista> selecionar() throws SQLException, ClassNotFoundException {
         List<Dentista> lista = new ArrayList<>();
-        try (Connection conexao = abrirConexao();
-             PreparedStatement stmt = conexao.prepareStatement("SELECT * FROM dentista ORDER BY id_dent");
-             ResultSet rs = stmt.executeQuery()) {
+        try (Connection conexao = abrirConexao(); PreparedStatement stmt = conexao.prepareStatement("SELECT * FROM dentista ORDER BY id_dent"); ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) lista.add(montar(rs));
         }
         return lista;
+    }
+
+    public Dentista login(String email, String senha)
+            throws SQLException, ClassNotFoundException {
+
+        String sql = "SELECT * FROM dentista WHERE email_dent = ? AND senha_dent = ?";
+
+        try (Connection conexao = abrirConexao();
+             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+            stmt.setString(1, email);
+            stmt.setString(2, senha);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return montar(rs);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public Dentista buscarPorEmail(String email) throws SQLException, ClassNotFoundException {
+        String sql = "SELECT * FROM dentista WHERE email_dent = ?";
+        try (Connection conexao = abrirConexao();
+             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return montar(rs);
+                return null;
+            }
+        }
     }
 
     private Dentista montar(ResultSet rs) throws SQLException {

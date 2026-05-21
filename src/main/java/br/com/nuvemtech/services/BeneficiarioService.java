@@ -27,4 +27,9 @@ public class BeneficiarioService {
     public void deletar(int id) throws SQLException, ClassNotFoundException {
         bo.deletarBo(id);
     }
+
+    public Beneficiario login(String email, String senha)
+            throws SQLException, ClassNotFoundException {
+        return bo.loginBo(email, senha);
+    }
 }

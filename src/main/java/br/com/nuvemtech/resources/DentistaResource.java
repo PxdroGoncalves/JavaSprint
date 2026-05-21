@@ -1,5 +1,6 @@
 package br.com.nuvemtech.resources;
 
+import br.com.nuvemtech.dto.LoginRequest;
 import br.com.nuvemtech.services.DentistaService;
 import br.com.nuvemtech.entities.Dentista;
 import jakarta.ws.rs.*;
@@ -46,5 +47,17 @@ public class DentistaResource {
     public Response deletar(@PathParam("id") int id) throws SQLException, ClassNotFoundException {
         service.deletar(id);
         return Response.noContent().build();
+    }
+
+    @POST
+    @Path("/login")
+    public Response login(LoginRequest request)
+            throws SQLException, ClassNotFoundException {
+        Dentista obj =
+                service.login(
+                        request.getEmail(),
+                        request.getSenha()
+                );
+        return Response.ok(obj).build();
     }
 }

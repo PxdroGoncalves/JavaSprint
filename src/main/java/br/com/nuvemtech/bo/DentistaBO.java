@@ -35,6 +35,18 @@ public class DentistaBO {
         new DentistaDAO().deletar(id);
     }
 
+    public Dentista loginBo(String email, String senha)
+            throws SQLException, ClassNotFoundException {
+        Dentista obj =
+                new DentistaDAO().login(email, senha);
+        if (obj == null) {
+            throw new NotFoundException(
+                    "Email ou senha invalidos."
+            );
+        }
+        return obj;
+    }
+
     private void validar(Dentista obj) {
         if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
         if (obj.getIdDentista() <= 0) throw new RegraNegocioException("ID invalido.");

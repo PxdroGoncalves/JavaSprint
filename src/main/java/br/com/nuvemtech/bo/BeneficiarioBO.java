@@ -35,9 +35,23 @@ public class BeneficiarioBO {
         new BeneficiarioDAO().deletar(id);
     }
 
+    public Beneficiario loginBo(String email, String senha)
+            throws SQLException, ClassNotFoundException {
+        Beneficiario obj =
+                new BeneficiarioDAO().login(email, senha);
+        if (obj == null) {
+            throw new NotFoundException(
+                    "Email ou senha invalidos."
+            );
+        }
+        return obj;
+    }
+
     private void validar(Beneficiario obj) {
-        if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
-        if (obj.getIdBeneficiario() <= 0) throw new RegraNegocioException("ID invalido.");
+        if (obj == null)
+            throw new RegraNegocioException("Dados obrigatorios nao informados.");
+        if (obj.getIdBeneficiario() <= 0)
+            throw new RegraNegocioException("ID invalido.");
     }
 
 }
