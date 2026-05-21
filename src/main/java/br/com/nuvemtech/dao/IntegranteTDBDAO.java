@@ -70,6 +70,20 @@ public class IntegranteTDBDAO {
         return lista;
     }
 
+    public IntegranteTDB login(String email, String senha)
+            throws SQLException, ClassNotFoundException {
+        String sql = "SELECT * FROM integrante_tdb WHERE email_integ = ? AND senha_integ = ?";
+        try (Connection conexao = abrirConexao();
+             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            stmt.setString(2, senha);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return montar(rs);
+                return null;
+            }
+        }
+    }
+
     private IntegranteTDB montar(ResultSet rs) throws SQLException {
         IntegranteTDB i = new IntegranteTDB();
         i.setIdIntegrante(rs.getInt("id_integ"));

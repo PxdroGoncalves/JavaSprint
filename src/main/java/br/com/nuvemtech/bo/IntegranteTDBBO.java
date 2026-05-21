@@ -39,4 +39,11 @@ public class IntegranteTDBBO {
         if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
         if (obj.getIdIntegrante() <= 0) throw new RegraNegocioException("ID invalido.");
     }
+
+    public IntegranteTDB loginBo(String email, String senha)
+            throws SQLException, ClassNotFoundException {
+        IntegranteTDB obj = new IntegranteTDBDAO().login(email, senha);
+        if (obj == null) throw new NotFoundException("Email ou senha invalidos.");
+        return obj;
+    }
 }
