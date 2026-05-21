@@ -1,7 +1,6 @@
 package br.com.nuvemtech.entities;
 
 import java.time.LocalDate;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class IntegranteTDB extends Pessoa {
     private int idIntegrante;
@@ -25,7 +24,6 @@ public class IntegranteTDB extends Pessoa {
     public void setCargo(String cargo) { this.cargo = cargo; }
     public LocalDate getDataCadastro() { return dataCadastro; }
     public void setDataCadastro(LocalDate dataCadastro) { this.dataCadastro = dataCadastro; }
-    @JsonIgnore
     public String getSenha() { return senha; }
     public void setSenha(String senha) { this.senha = senha; }
 
