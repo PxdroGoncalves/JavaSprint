@@ -2,10 +2,12 @@ package br.com.nuvemtech.services;
 
 import br.com.nuvemtech.bo.DentistaBO;
 import br.com.nuvemtech.entities.Dentista;
+
 import java.sql.SQLException;
 import java.util.List;
 
 public class DentistaService {
+
     private final DentistaBO bo = new DentistaBO();
 
     public List<Dentista> selecionar() throws SQLException, ClassNotFoundException {
@@ -20,6 +22,10 @@ public class DentistaService {
         bo.inserirBo(obj);
     }
 
+    public void cadastrar(Dentista obj) throws SQLException, ClassNotFoundException {
+        bo.cadastrarBo(obj);
+    }
+
     public void atualizar(Dentista obj) throws SQLException, ClassNotFoundException {
         bo.atualizarBo(obj);
     }
@@ -28,9 +34,7 @@ public class DentistaService {
         bo.deletarBo(id);
     }
 
-    public Dentista login(String email, String senha)
-            throws SQLException, ClassNotFoundException {
-
+    public Dentista login(String email, String senha) throws SQLException, ClassNotFoundException {
         return bo.loginBo(email, senha);
     }
 }

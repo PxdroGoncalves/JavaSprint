@@ -2,10 +2,12 @@ package br.com.nuvemtech.services;
 
 import br.com.nuvemtech.bo.BeneficiarioBO;
 import br.com.nuvemtech.entities.Beneficiario;
+
 import java.sql.SQLException;
 import java.util.List;
 
 public class BeneficiarioService {
+
     private final BeneficiarioBO bo = new BeneficiarioBO();
 
     public List<Beneficiario> selecionar() throws SQLException, ClassNotFoundException {
@@ -20,6 +22,10 @@ public class BeneficiarioService {
         bo.inserirBo(obj);
     }
 
+    public void cadastrar(Beneficiario obj) throws SQLException, ClassNotFoundException {
+        bo.cadastrarBo(obj);
+    }
+
     public void atualizar(Beneficiario obj) throws SQLException, ClassNotFoundException {
         bo.atualizarBo(obj);
     }
@@ -28,8 +34,7 @@ public class BeneficiarioService {
         bo.deletarBo(id);
     }
 
-    public Beneficiario login(String email, String senha)
-            throws SQLException, ClassNotFoundException {
+    public Beneficiario login(String email, String senha) throws SQLException, ClassNotFoundException {
         return bo.loginBo(email, senha);
     }
 }

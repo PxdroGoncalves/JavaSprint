@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class DentistaBO {
+
     public List<Dentista> selecionarBo() throws SQLException, ClassNotFoundException {
         return new DentistaDAO().selecionar();
     }
@@ -25,6 +26,14 @@ public class DentistaBO {
         new DentistaDAO().inserir(obj);
     }
 
+    public void cadastrarBo(Dentista obj) throws SQLException, ClassNotFoundException {
+        if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
+        if (obj.getNome() == null || obj.getNome().isBlank()) throw new RegraNegocioException("Nome obrigatorio.");
+        if (obj.getEmail() == null || obj.getEmail().isBlank()) throw new RegraNegocioException("Email obrigatorio.");
+        if (obj.getSenha() == null || obj.getSenha().isBlank()) throw new RegraNegocioException("Senha obrigatoria.");
+        new DentistaDAO().cadastrar(obj);
+    }
+
     public void atualizarBo(Dentista obj) throws SQLException, ClassNotFoundException {
         validar(obj);
         if (obj.getDataCadastro() == null) obj.setDataCadastro(java.time.LocalDate.now());
@@ -35,15 +44,9 @@ public class DentistaBO {
         new DentistaDAO().deletar(id);
     }
 
-    public Dentista loginBo(String email, String senha)
-            throws SQLException, ClassNotFoundException {
-        Dentista obj =
-                new DentistaDAO().login(email, senha);
-        if (obj == null) {
-            throw new NotFoundException(
-                    "Email ou senha invalidos."
-            );
-        }
+    public Dentista loginBo(String email, String senha) throws SQLException, ClassNotFoundException {
+        Dentista obj = new DentistaDAO().login(email, senha);
+        if (obj == null) throw new NotFoundException("Email ou senha invalidos.");
         return obj;
     }
 

@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class IntegranteTDBBO {
+
     public List<IntegranteTDB> selecionarBo() throws SQLException, ClassNotFoundException {
         return new IntegranteTDBDAO().selecionar();
     }
@@ -25,6 +26,14 @@ public class IntegranteTDBBO {
         new IntegranteTDBDAO().inserir(obj);
     }
 
+    public void cadastrarBo(IntegranteTDB obj) throws SQLException, ClassNotFoundException {
+        if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
+        if (obj.getNome() == null || obj.getNome().isBlank()) throw new RegraNegocioException("Nome obrigatorio.");
+        if (obj.getEmail() == null || obj.getEmail().isBlank()) throw new RegraNegocioException("Email obrigatorio.");
+        if (obj.getSenha() == null || obj.getSenha().isBlank()) throw new RegraNegocioException("Senha obrigatoria.");
+        new IntegranteTDBDAO().cadastrar(obj);
+    }
+
     public void atualizarBo(IntegranteTDB obj) throws SQLException, ClassNotFoundException {
         validar(obj);
         if (obj.getDataCadastro() == null) obj.setDataCadastro(java.time.LocalDate.now());
@@ -35,15 +44,14 @@ public class IntegranteTDBBO {
         new IntegranteTDBDAO().deletar(id);
     }
 
-    private void validar(IntegranteTDB obj) {
-        if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
-        if (obj.getIdIntegrante() <= 0) throw new RegraNegocioException("ID invalido.");
-    }
-
-    public IntegranteTDB loginBo(String email, String senha)
-            throws SQLException, ClassNotFoundException {
+    public IntegranteTDB loginBo(String email, String senha) throws SQLException, ClassNotFoundException {
         IntegranteTDB obj = new IntegranteTDBDAO().login(email, senha);
         if (obj == null) throw new NotFoundException("Email ou senha invalidos.");
         return obj;
+    }
+
+    private void validar(IntegranteTDB obj) {
+        if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
+        if (obj.getIdIntegrante() <= 0) throw new RegraNegocioException("ID invalido.");
     }
 }

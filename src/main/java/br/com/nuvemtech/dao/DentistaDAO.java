@@ -28,6 +28,30 @@ public class DentistaDAO {
         }
     }
 
+    public void cadastrar(Dentista d) throws SQLException, ClassNotFoundException {
+        int novoId;
+        try (Connection conexao = abrirConexao();
+             PreparedStatement stmt = conexao.prepareStatement("SELECT NVL(MAX(id_dent), 0) + 1 FROM dentista");
+             ResultSet rs = stmt.executeQuery()) {
+            rs.next();
+            novoId = rs.getInt(1);
+        }
+
+        String sql = "INSERT INTO dentista (id_dent, nm_dent, cro_dent, especialidade, email_dent, telefone_dent, dt_cadastro, senha_dent) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conexao = abrirConexao();
+             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.setInt(1, novoId);
+            stmt.setString(2, d.getNome());
+            stmt.setString(3, d.getCro());
+            stmt.setString(4, d.getEspecialidade());
+            stmt.setString(5, d.getEmail());
+            stmt.setString(6, d.getTelefone());
+            stmt.setDate(7, Date.valueOf(d.getDataCadastro() != null ? d.getDataCadastro() : java.time.LocalDate.now()));
+            stmt.setString(8, d.getSenha());
+            stmt.executeUpdate();
+        }
+    }
+
     public void atualizar(Dentista d) throws SQLException, ClassNotFoundException {
         String sql = "UPDATE dentista SET nm_dent=?, cro_dent=?, especialidade=?, email_dent=?, telefone_dent=?, dt_cadastro=?, senha_dent=? WHERE id_dent=?";
         try (Connection conexao = abrirConexao(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -68,37 +92,16 @@ public class DentistaDAO {
         return lista;
     }
 
-    public Dentista login(String email, String senha)
-            throws SQLException, ClassNotFoundException {
-
+    public Dentista login(String email, String senha) throws SQLException, ClassNotFoundException {
         String sql = "SELECT * FROM dentista WHERE email_dent = ? AND senha_dent = ?";
-
-        try (Connection conexao = abrirConexao();
-             PreparedStatement stmt = conexao.prepareStatement(sql)) {
-
+        try (Connection conexao = abrirConexao(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setString(1, email);
             stmt.setString(2, senha);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return montar(rs);
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public Dentista buscarPorEmail(String email) throws SQLException, ClassNotFoundException {
-        String sql = "SELECT * FROM dentista WHERE email_dent = ?";
-        try (Connection conexao = abrirConexao();
-             PreparedStatement stmt = conexao.prepareStatement(sql)) {
-            stmt.setString(1, email);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) return montar(rs);
-                return null;
             }
         }
+        return null;
     }
 
     private Dentista montar(ResultSet rs) throws SQLException {

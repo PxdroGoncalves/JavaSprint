@@ -13,6 +13,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class IntegranteTDBResource {
+
     private final IntegranteTDBService service = new IntegranteTDBService();
 
     @GET
@@ -34,6 +35,13 @@ public class IntegranteTDBResource {
         return Response.created(builder.build()).entity(obj).build();
     }
 
+    @POST
+    @Path("/cadastrar")
+    public Response cadastrar(IntegranteTDB obj) throws SQLException, ClassNotFoundException {
+        service.cadastrar(obj);
+        return Response.status(Response.Status.CREATED).entity(obj).build();
+    }
+
     @PUT
     @Path("/{id}")
     public Response atualizar(@PathParam("id") int id, IntegranteTDB obj) throws SQLException, ClassNotFoundException {
@@ -51,12 +59,8 @@ public class IntegranteTDBResource {
 
     @POST
     @Path("/login")
-    public Response login(LoginRequest request)
-            throws SQLException, ClassNotFoundException {
-        IntegranteTDB obj = service.login(
-                request.getEmail(),
-                request.getSenha()
-        );
+    public Response login(LoginRequest request) throws SQLException, ClassNotFoundException {
+        IntegranteTDB obj = service.login(request.getEmail(), request.getSenha());
         return Response.ok(obj).build();
     }
 }
