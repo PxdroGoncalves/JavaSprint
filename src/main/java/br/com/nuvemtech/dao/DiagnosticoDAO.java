@@ -24,6 +24,8 @@ public class DiagnosticoDAO {
             if (rs.next()) novoId = rs.getInt(1);
         }
 
+        d.setIdDiagnostico(novoId);
+
         String sql = "INSERT INTO diagnostico (id_diag, dt_diag, ds_diagnostico, ds_procedimento, fk_caso_id_caso, fk_beneficiario_id_bene) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conexao = abrirConexao();

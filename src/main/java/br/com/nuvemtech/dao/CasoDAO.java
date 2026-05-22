@@ -24,6 +24,8 @@ public class CasoDAO {
             if (rs.next()) novoId = rs.getInt(1);
         }
 
+        c.setIdCaso(novoId);
+
         String sql = "INSERT INTO caso (id_caso, dt_abertura, dt_fechamento, st_caso, fk_beneficiario_id_bene, fk_dentista_id_dent, fk_integrante_id_integ) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conexao = abrirConexao();
