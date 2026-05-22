@@ -38,16 +38,22 @@ public class PatrocinadorResource {
 
     @POST
     @Path("/cadastrar")
-    public Response cadastrar(CadastroPatrocinadorRequest request)
-            throws SQLException, ClassNotFoundException {
-        Patrocinador patrocinador = new Patrocinador();
-        patrocinador.setNome(request.getNome());
-        patrocinador.setEmail(request.getEmail());
-        patrocinador.setSenha(request.getSenha());
-        patrocinador.setCpfCnpj(request.getCpfCnpj());
-        patrocinador.setTelefone(request.getTelefone());
-        service.cadastrar(patrocinador);
-        return Response.status(Response.Status.CREATED).entity(patrocinador).build();
+    public Response cadastrar(CadastroPatrocinadorRequest request) {
+        try {
+            Patrocinador patrocinador = new Patrocinador();
+            patrocinador.setNome(request.getNome());
+            patrocinador.setEmail(request.getEmail());
+            patrocinador.setSenha(request.getSenha());
+            patrocinador.setCpfCnpj(request.getCpfCnpj());
+            patrocinador.setTelefone(request.getTelefone());
+            service.cadastrar(patrocinador);
+            return Response.status(Response.Status.CREATED).entity(patrocinador).build();
+
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro interno do servidor").build();
+        }
     }
 
     @PUT

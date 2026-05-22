@@ -28,25 +28,67 @@ public class PatrocinadorDAO {
     }
 
     public void cadastrar(Patrocinador p) throws SQLException, ClassNotFoundException {
-        int novoId;
+
+        if (p.getNome() == null || p.getNome().isBlank()) {
+            throw new RuntimeException("Nome obrigatório");
+        }
+
+        if (p.getEmail() == null || p.getEmail().isBlank()) {
+            throw new RuntimeException("Email obrigatório");
+        }
+
+        if (p.getSenha() == null || p.getSenha().isBlank()) {
+            throw new RuntimeException("Senha obrigatória");
+        }
+
+        if (p.getCpfCnpj() == null ||
+                !(p.getCpfCnpj().length() == 11 || p.getCpfCnpj().length() == 14)) {
+
+            throw new RuntimeException("CPF/CNPJ deve conter 11 ou 14 números");
+        }
+
+        String verificaEmail =
+                "SELECT COUNT(*) FROM patrocinador WHERE email_patr = ?";
+
         try (Connection conexao = abrirConexao();
-             PreparedStatement stmt = conexao.prepareStatement("SELECT NVL(MAX(id_patr), 0) + 1 FROM patrocinador");
+             PreparedStatement stmt = conexao.prepareStatement(verificaEmail)) {
+
+            stmt.setString(1, p.getEmail().toLowerCase());
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next() && rs.getInt(1) > 0) {
+                throw new RuntimeException("Email já cadastrado");
+            }
+        }
+
+        int novoId;
+
+        try (Connection conexao = abrirConexao();
+             PreparedStatement stmt = conexao.prepareStatement(
+                     "SELECT NVL(MAX(id_patr), 0) + 1 FROM patrocinador");
              ResultSet rs = stmt.executeQuery()) {
+
             rs.next();
             novoId = rs.getInt(1);
         }
 
         p.setIdPatrocinador(novoId);
 
-        String sql = "INSERT INTO patrocinador (id_patr, nm_patr, email_patr, cpf_cnpj_patr, telefone_patr, senha_patr) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql =
+        "INSERT INTO patrocinador (id_patr,nm_patr,email_patr,cpf_cnpj_patr,senha_patr) VALUES (?, ?, ?, ?, ?, ?)"
+   ;
+
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
             stmt.setInt(1, novoId);
             stmt.setString(2, p.getNome());
-            stmt.setString(3, p.getEmail() != null ? p.getEmail().toLowerCase() : null);
+            stmt.setString(3, p.getEmail().toLowerCase());
             stmt.setString(4, p.getCpfCnpj());
             stmt.setString(5, p.getTelefone());
             stmt.setString(6, p.getSenha());
+
             stmt.executeUpdate();
         }
     }
