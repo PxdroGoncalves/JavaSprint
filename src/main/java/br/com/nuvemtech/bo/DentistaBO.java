@@ -21,7 +21,7 @@ public class DentistaBO {
     }
 
     public void inserirBo(Dentista obj) throws SQLException, ClassNotFoundException {
-        validar(obj);
+        validarDados(obj);
         if (obj.getDataCadastro() == null) obj.setDataCadastro(java.time.LocalDate.now());
         new DentistaDAO().inserir(obj);
     }
@@ -53,5 +53,10 @@ public class DentistaBO {
     private void validar(Dentista obj) {
         if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
         if (obj.getIdDentista() <= 0) throw new RegraNegocioException("ID invalido.");
+    }
+
+    private void validarDados(Dentista obj) {
+        if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
+        if (obj.getNome() == null || obj.getNome().isBlank()) throw new RegraNegocioException("Nome obrigatorio.");
     }
 }

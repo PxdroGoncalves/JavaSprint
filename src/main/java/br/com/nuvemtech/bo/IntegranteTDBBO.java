@@ -21,7 +21,7 @@ public class IntegranteTDBBO {
     }
 
     public void inserirBo(IntegranteTDB obj) throws SQLException, ClassNotFoundException {
-        validar(obj);
+        validarDados(obj);
         if (obj.getDataCadastro() == null) obj.setDataCadastro(java.time.LocalDate.now());
         new IntegranteTDBDAO().inserir(obj);
     }
@@ -53,5 +53,10 @@ public class IntegranteTDBBO {
     private void validar(IntegranteTDB obj) {
         if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
         if (obj.getIdIntegrante() <= 0) throw new RegraNegocioException("ID invalido.");
+    }
+
+    private void validarDados(IntegranteTDB obj) {
+        if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
+        if (obj.getNome() == null || obj.getNome().isBlank()) throw new RegraNegocioException("Nome obrigatorio.");
     }
 }

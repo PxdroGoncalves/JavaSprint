@@ -21,7 +21,7 @@ public class BeneficiarioBO {
     }
 
     public void inserirBo(Beneficiario obj) throws SQLException, ClassNotFoundException {
-        validar(obj);
+        validarDados(obj);
         if (obj.getDataCadastro() == null) obj.setDataCadastro(java.time.LocalDate.now());
         new BeneficiarioDAO().inserir(obj);
     }
@@ -53,5 +53,10 @@ public class BeneficiarioBO {
     private void validar(Beneficiario obj) {
         if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
         if (obj.getIdBeneficiario() <= 0) throw new RegraNegocioException("ID invalido.");
+    }
+
+    private void validarDados(Beneficiario obj) {
+        if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
+        if (obj.getNome() == null || obj.getNome().isBlank()) throw new RegraNegocioException("Nome obrigatorio.");
     }
 }
