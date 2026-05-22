@@ -22,20 +22,29 @@ public class BeneficiarioBO {
 
     public void inserirBo(Beneficiario obj) throws SQLException, ClassNotFoundException {
         validarDados(obj);
+        obj.setCpf(limparCpf(obj.getCpf()));
+        if (obj.getSenha() == null || obj.getSenha().isBlank())
+            obj.setSenha(gerarSenhaTemporaria(obj));
         if (obj.getDataCadastro() == null) obj.setDataCadastro(java.time.LocalDate.now());
-        new BeneficiarioDAO().inserir(obj);
+        new BeneficiarioDAO().cadastrar(obj);
     }
 
     public void cadastrarBo(Beneficiario obj) throws SQLException, ClassNotFoundException {
         if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
         if (obj.getNome() == null || obj.getNome().isBlank()) throw new RegraNegocioException("Nome obrigatorio.");
         if (obj.getEmail() == null || obj.getEmail().isBlank()) throw new RegraNegocioException("Email obrigatorio.");
-        if (obj.getSenha() == null || obj.getSenha().isBlank()) throw new RegraNegocioException("Senha obrigatoria.");
+        if (obj.getCpf() != null) obj.setCpf(limparCpf(obj.getCpf()));
+        if (obj.getSenha() == null || obj.getSenha().isBlank())
+            obj.setSenha(gerarSenhaTemporaria(obj));
+        if (obj.getDataCadastro() == null) obj.setDataCadastro(java.time.LocalDate.now());
         new BeneficiarioDAO().cadastrar(obj);
     }
 
     public void atualizarBo(Beneficiario obj) throws SQLException, ClassNotFoundException {
         validar(obj);
+        if (obj.getCpf() != null) obj.setCpf(limparCpf(obj.getCpf()));
+        if (obj.getSenha() == null || obj.getSenha().isBlank())
+            obj.setSenha(gerarSenhaTemporaria(obj));
         if (obj.getDataCadastro() == null) obj.setDataCadastro(java.time.LocalDate.now());
         new BeneficiarioDAO().atualizar(obj);
     }
@@ -48,6 +57,16 @@ public class BeneficiarioBO {
         Beneficiario obj = new BeneficiarioDAO().login(email, senha);
         if (obj == null) throw new NotFoundException("Email ou senha invalidos.");
         return obj;
+    }
+
+    private String limparCpf(String cpf) {
+        return cpf.replaceAll("[^0-9]", "");
+    }
+
+    private String gerarSenhaTemporaria(Beneficiario obj) {
+        String base = obj.getCpf() != null ? obj.getCpf().replaceAll("[^0-9]", "") : "";
+        if (base.length() >= 6) return base.substring(0, 6);
+        return "nuvem123";
     }
 
     private void validar(Beneficiario obj) {

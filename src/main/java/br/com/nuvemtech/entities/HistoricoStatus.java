@@ -1,5 +1,6 @@
 package br.com.nuvemtech.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDate;
 
 public class HistoricoStatus {
@@ -34,8 +35,13 @@ public class HistoricoStatus {
     public String getStatusNovo() { return statusNovo; }
     public void setStatusNovo(String statusNovo) { this.statusNovo = statusNovo; }
 
-    public String getStatus() { return statusNovo; }
+    // Alias para o frontend que envia { "status": "EM_ANDAMENTO" }
+    @JsonProperty("status")
     public void setStatus(String status) { this.statusNovo = status; }
+
+    // Serializa "status" no JSON de resposta (além de "statusNovo")
+    @JsonProperty("status")
+    public String getStatus() { return statusNovo; }
 
     public Caso getCaso() { return caso; }
     public void setCaso(Caso caso) { this.caso = caso; }

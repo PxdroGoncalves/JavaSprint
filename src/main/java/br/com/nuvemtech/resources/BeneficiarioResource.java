@@ -28,14 +28,17 @@ public class BeneficiarioResource {
         return service.buscarPorId(id);
     }
 
+    // POST /beneficiarios — cadastra com auto-ID (usado pelo prontuário)
     @POST
     public Response inserir(Beneficiario obj, @Context UriInfo uriInfo) throws SQLException, ClassNotFoundException {
         service.inserir(obj);
+        Beneficiario salvo = service.buscarPorId(obj.getIdBeneficiario());
         UriBuilder builder = uriInfo.getAbsolutePathBuilder();
         builder.path(Integer.toString(obj.getIdBeneficiario()));
-        return Response.created(builder.build()).entity(obj).build();
+        return Response.created(builder.build()).entity(salvo != null ? salvo : obj).build();
     }
 
+    // POST /beneficiarios/cadastrar — endpoint original de auto-cadastro
     @POST
     @Path("/cadastrar")
     public Response cadastrar(CadastroBeneficiarioRequest req) throws SQLException, ClassNotFoundException {
