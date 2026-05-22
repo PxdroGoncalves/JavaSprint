@@ -96,7 +96,9 @@ public class RelacionamentoDAO {
                 p.setIdPatrocinador(rs.getInt("id_patr"));
                 p.setNome(rs.getString("nm_patr"));
                 p.setEmail(rs.getString("email_patr"));
-                p.setAnonimo(rs.getString("anonimo"));
+                p.setTipoApoio(rs.getString("tipo_apoio"));
+                p.setCnpjCpf(rs.getString("cnpj_cpf"));
+                p.setTelefone(rs.getString("telefone_patr"));
                 return p;
             }
         }
@@ -116,15 +118,11 @@ public class RelacionamentoDAO {
 
     public static Caso montarCaso(Connection conexao, ResultSet rs) throws SQLException {
         Caso c = new Caso();
-
         c.setIdCaso(rs.getInt("id_caso"));
-
         Date abertura = rs.getDate("dt_abertura");
         if (abertura != null) c.setDataAbertura(abertura.toLocalDate());
-
         Date fechamento = rs.getDate("dt_fechamento");
         if (fechamento != null) c.setDataFechamento(fechamento.toLocalDate());
-
         c.setStatus(rs.getString("st_caso"));
 
         c.setBeneficiario(
@@ -133,7 +131,6 @@ public class RelacionamentoDAO {
                         rs.getInt("fk_beneficiario_id_bene")
                 )
         );
-
         int idDentista = rs.getInt("fk_dentista_id_dent");
         if (!rs.wasNull()) {
             c.setDentista(buscarDentista(conexao, idDentista));
