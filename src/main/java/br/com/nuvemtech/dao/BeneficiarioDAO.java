@@ -19,11 +19,11 @@ public class BeneficiarioDAO {
             stmt.setInt(1, b.getIdBeneficiario());
             stmt.setString(2, b.getNome());
             stmt.setString(3, b.getCpf());
-            stmt.setDate(4, Date.valueOf(b.getDataNascimento()));
+            stmt.setDate(4, b.getDataNascimento() != null ? Date.valueOf(b.getDataNascimento()) : null);
             stmt.setString(5, b.getEmail());
             stmt.setString(6, b.getTelefone());
             stmt.setString(7, b.getEndereco());
-            stmt.setDate(8, Date.valueOf(b.getDataCadastro()));
+            stmt.setDate(8, Date.valueOf(b.getDataCadastro() != null ? b.getDataCadastro() : java.time.LocalDate.now()));
             stmt.setString(9, b.getSenha());
             stmt.executeUpdate();
         }
@@ -60,11 +60,11 @@ public class BeneficiarioDAO {
         try (Connection conexao = abrirConexao(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setString(1, b.getNome());
             stmt.setString(2, b.getCpf());
-            stmt.setDate(3, Date.valueOf(b.getDataNascimento()));
+            stmt.setDate(3, b.getDataNascimento() != null ? Date.valueOf(b.getDataNascimento()) : null);
             stmt.setString(4, b.getEmail());
             stmt.setString(5, b.getTelefone());
             stmt.setString(6, b.getEndereco());
-            stmt.setDate(7, Date.valueOf(b.getDataCadastro()));
+            stmt.setDate(7, Date.valueOf(b.getDataCadastro() != null ? b.getDataCadastro() : java.time.LocalDate.now()));
             stmt.setString(8, b.getSenha());
             stmt.setInt(9, b.getIdBeneficiario());
             stmt.executeUpdate();

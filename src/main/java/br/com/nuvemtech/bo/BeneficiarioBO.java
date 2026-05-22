@@ -58,5 +58,7 @@ public class BeneficiarioBO {
     private void validarDados(Beneficiario obj) {
         if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
         if (obj.getNome() == null || obj.getNome().isBlank()) throw new RegraNegocioException("Nome obrigatorio.");
+        if (obj.getCpf() == null || obj.getCpf().isBlank()) throw new RegraNegocioException("CPF obrigatorio.");
+        if (obj.getDataNascimento() == null) throw new RegraNegocioException("Data de nascimento obrigatoria.");
     }
 }

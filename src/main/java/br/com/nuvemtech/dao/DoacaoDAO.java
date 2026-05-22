@@ -3,6 +3,7 @@ package br.com.nuvemtech.dao;
 import br.com.nuvemtech.conexoes.ConexaoFactory;
 import br.com.nuvemtech.entities.*;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class DoacaoDAO {
             stmt.setInt(1, novoId);
             stmt.setString(2, d.getTipo());
             if (d.getValor() == null) stmt.setNull(3, Types.NUMERIC);
-            else stmt.setDouble(3, d.getValor());
+            else stmt.setBigDecimal(3, BigDecimal.valueOf(d.getValor()));
             stmt.setString(4, d.getDescricaoEquipamento());
             stmt.setDate(5, Date.valueOf(d.getDataDoacao()));
             stmt.setInt(6, d.getPatrocinador().getIdPatrocinador());
@@ -43,7 +44,7 @@ public class DoacaoDAO {
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setString(1, d.getTipo());
             if (d.getValor() == null) stmt.setNull(2, Types.NUMERIC);
-            else stmt.setDouble(2, d.getValor());
+            else stmt.setBigDecimal(2, BigDecimal.valueOf(d.getValor()));
             stmt.setString(3, d.getDescricaoEquipamento());
             stmt.setDate(4, Date.valueOf(d.getDataDoacao()));
             stmt.setInt(5, d.getPatrocinador().getIdPatrocinador());
@@ -85,8 +86,8 @@ public class DoacaoDAO {
         Doacao d = new Doacao();
         d.setIdDoacao(rs.getInt("id_doac"));
         d.setTipo(rs.getString("tp_doac"));
-        double valor = rs.getDouble("vl_doac");
-        if (!rs.wasNull()) d.setValor(valor);
+        BigDecimal valor = rs.getBigDecimal("vl_doac");
+        if (valor != null) d.setValor(valor.doubleValue());
         d.setDescricaoEquipamento(rs.getString("ds_equipamento"));
         Date data = rs.getDate("dt_doac");
         if (data != null) d.setDataDoacao(data.toLocalDate());

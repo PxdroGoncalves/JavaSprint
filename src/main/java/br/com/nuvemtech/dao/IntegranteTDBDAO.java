@@ -20,7 +20,7 @@ public class IntegranteTDBDAO {
             stmt.setString(2, i.getNome());
             stmt.setString(3, i.getEmail());
             stmt.setString(4, i.getCargo());
-            stmt.setDate(5, Date.valueOf(i.getDataCadastro()));
+            stmt.setDate(5, Date.valueOf(i.getDataCadastro() != null ? i.getDataCadastro() : java.time.LocalDate.now()));
             stmt.setString(6, i.getSenha());
             stmt.executeUpdate();
         }
@@ -55,7 +55,7 @@ public class IntegranteTDBDAO {
             stmt.setString(1, i.getNome());
             stmt.setString(2, i.getEmail());
             stmt.setString(3, i.getCargo());
-            stmt.setDate(4, Date.valueOf(i.getDataCadastro()));
+            stmt.setDate(4, Date.valueOf(i.getDataCadastro() != null ? i.getDataCadastro() : java.time.LocalDate.now()));
             stmt.setString(5, i.getSenha());
             stmt.setInt(6, i.getIdIntegrante());
             stmt.executeUpdate();

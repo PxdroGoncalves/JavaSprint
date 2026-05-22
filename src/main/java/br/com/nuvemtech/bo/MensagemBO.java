@@ -38,8 +38,27 @@ public class MensagemBO {
 
     private void validarDados(Mensagem obj) {
         if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
-        if (obj.getTexto() == null || obj.getTexto().isBlank()) throw new RegraNegocioException("Texto da mensagem obrigatorio.");
-        if (obj.getRemetente() == null || obj.getRemetente().isBlank()) throw new RegraNegocioException("Remetente obrigatorio.");
+        if (obj.getTexto() == null || obj.getTexto().isBlank())
+            throw new RegraNegocioException("Texto da mensagem obrigatorio.");
+
+        String rem = obj.getRemetente();
+        if (rem == null || rem.isBlank())
+            throw new RegraNegocioException("Remetente obrigatorio.");
+
+        if (!rem.equals("BENEFICIARIO") && !rem.equals("DENTISTA") && !rem.equals("INTEGRANTE_TDB"))
+            throw new RegraNegocioException("Remetente invalido. Use: BENEFICIARIO, DENTISTA ou INTEGRANTE_TDB.");
+
+        if ("BENEFICIARIO".equals(rem) &&
+                (obj.getBeneficiario() == null || obj.getBeneficiario().getIdBeneficiario() <= 0))
+            throw new RegraNegocioException("Remetente BENEFICIARIO exige id do beneficiario.");
+
+        if ("DENTISTA".equals(rem) &&
+                (obj.getDentista() == null || obj.getDentista().getIdDentista() <= 0))
+            throw new RegraNegocioException("Remetente DENTISTA exige id do dentista.");
+
+        if ("INTEGRANTE_TDB".equals(rem) &&
+                (obj.getIntegrante() == null || obj.getIntegrante().getIdIntegrante() <= 0))
+            throw new RegraNegocioException("Remetente INTEGRANTE_TDB exige id do integrante.");
     }
 
     private void validar(Mensagem obj) {

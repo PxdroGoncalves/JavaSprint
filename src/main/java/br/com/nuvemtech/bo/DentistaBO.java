@@ -58,5 +58,6 @@ public class DentistaBO {
     private void validarDados(Dentista obj) {
         if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
         if (obj.getNome() == null || obj.getNome().isBlank()) throw new RegraNegocioException("Nome obrigatorio.");
+        if (obj.getCro() == null || obj.getCro().isBlank()) throw new RegraNegocioException("CRO obrigatorio.");
     }
 }

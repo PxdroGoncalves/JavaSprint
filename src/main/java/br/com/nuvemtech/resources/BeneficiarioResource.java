@@ -56,7 +56,7 @@ public class BeneficiarioResource {
     public Response atualizar(@PathParam("id") int id, Beneficiario obj) throws SQLException, ClassNotFoundException {
         obj.setIdBeneficiario(id);
         service.atualizar(obj);
-        return Response.ok(obj).build();
+        return Response.ok(service.buscarPorId(id)).build();
     }
 
     @DELETE
@@ -70,6 +70,10 @@ public class BeneficiarioResource {
     @Path("/login")
     public Response login(LoginRequest request) throws SQLException, ClassNotFoundException {
         Beneficiario obj = service.login(request.getEmail(), request.getSenha());
+        if (obj == null) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity(new ApiError("Email ou senha inválidos", 401)).build();
+        }
         return Response.ok(obj).build();
     }
 }

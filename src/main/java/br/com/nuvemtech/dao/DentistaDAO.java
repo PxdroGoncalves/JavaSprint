@@ -22,7 +22,7 @@ public class DentistaDAO {
             stmt.setString(4, d.getEspecialidade());
             stmt.setString(5, d.getEmail());
             stmt.setString(6, d.getTelefone());
-            stmt.setDate(7, Date.valueOf(d.getDataCadastro()));
+            stmt.setDate(7, Date.valueOf(d.getDataCadastro() != null ? d.getDataCadastro() : java.time.LocalDate.now()));
             stmt.setString(8, d.getSenha());
             stmt.executeUpdate();
         }
@@ -61,7 +61,7 @@ public class DentistaDAO {
             stmt.setString(3, d.getEspecialidade());
             stmt.setString(4, d.getEmail());
             stmt.setString(5, d.getTelefone());
-            stmt.setDate(6, Date.valueOf(d.getDataCadastro()));
+            stmt.setDate(6, Date.valueOf(d.getDataCadastro() != null ? d.getDataCadastro() : java.time.LocalDate.now()));
             stmt.setString(7, d.getSenha());
             stmt.setInt(8, d.getIdDentista());
             stmt.executeUpdate();

@@ -75,6 +75,10 @@ public class PatrocinadorResource {
     @Path("/login")
     public Response login(LoginRequest request) throws SQLException, ClassNotFoundException {
         Patrocinador obj = service.login(request.getEmail(), request.getSenha());
+        if (obj == null) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity(new ApiError("Email ou senha inválidos", 401)).build();
+        }
         return Response.ok(obj).build();
     }
 }

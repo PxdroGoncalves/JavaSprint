@@ -53,6 +53,12 @@ public class PatrocinadorBO {
         if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
         if (obj.getNome() == null || obj.getNome().isBlank())
             throw new RegraNegocioException("Nome obrigatorio.");
+        if (obj.getEmail() == null || obj.getEmail().isBlank())
+            throw new RegraNegocioException("Email obrigatorio.");
+        if (obj.getSenha() == null || obj.getSenha().isBlank())
+            throw new RegraNegocioException("Senha obrigatoria.");
+        if (obj.getCpfCnpj() == null || !(obj.getCpfCnpj().length() == 11 || obj.getCpfCnpj().length() == 14))
+            throw new RegraNegocioException("CPF/CNPJ deve conter 11 ou 14 numeros.");
     }
 
     private void validar(Patrocinador obj) {
