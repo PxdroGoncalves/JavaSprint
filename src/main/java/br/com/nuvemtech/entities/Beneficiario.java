@@ -11,6 +11,7 @@ public class Beneficiario extends Pessoa {
     private String telefone;
     private String endereco;
     private LocalDate dataCadastro;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
 
     public Beneficiario() {}
@@ -38,7 +39,6 @@ public class Beneficiario extends Pessoa {
     public void setEndereco(String endereco) { this.endereco = endereco; }
     public LocalDate getDataCadastro() { return dataCadastro; }
     public void setDataCadastro(LocalDate dataCadastro) { this.dataCadastro = dataCadastro; }
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String getSenha() { return senha; }
     public void setSenha(String senha) { this.senha = senha; }
 

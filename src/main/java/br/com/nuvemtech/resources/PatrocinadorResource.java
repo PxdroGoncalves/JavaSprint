@@ -44,7 +44,9 @@ public class PatrocinadorResource {
         patrocinador.setNome(request.getNome());
         patrocinador.setEmail(request.getEmail());
         patrocinador.setSenha(request.getSenha());
-        patrocinador.setAnonimo(request.getAnonimo());
+        patrocinador.setTipoApoio(request.getTipoApoio());
+        patrocinador.setCnpjCpf(request.getCnpjCpf());
+        patrocinador.setTelefone(request.getTelefone());
         service.cadastrar(patrocinador);
         return Response.status(Response.Status.CREATED).entity(patrocinador).build();
     }

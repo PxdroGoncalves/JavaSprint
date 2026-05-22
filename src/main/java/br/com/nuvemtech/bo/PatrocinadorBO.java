@@ -30,6 +30,7 @@ public class PatrocinadorBO {
         if (obj.getNome() == null || obj.getNome().isBlank()) throw new RegraNegocioException("Nome obrigatorio.");
         if (obj.getEmail() == null || obj.getEmail().isBlank()) throw new RegraNegocioException("Email obrigatorio.");
         if (obj.getSenha() == null || obj.getSenha().isBlank()) throw new RegraNegocioException("Senha obrigatoria.");
+        if (obj.getCnpjCpf() == null || obj.getCnpjCpf().isBlank()) throw new RegraNegocioException("CNPJ/CPF obrigatorio.");
         new PatrocinadorDAO().cadastrar(obj);
     }
 

@@ -14,14 +14,16 @@ public class PatrocinadorDAO {
     }
 
     public void inserir(Patrocinador p) throws SQLException, ClassNotFoundException {
-        String sql = "INSERT INTO patrocinador (id_patr, nm_patr, email_patr, anonimo, senha_patr) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO patrocinador (id_patr, nm_patr, email_patr, tipo_apoio, cnpj_cpf, telefone_patr, senha_patr) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, p.getIdPatrocinador());
             stmt.setString(2, p.getNome());
             stmt.setString(3, p.getEmail());
-            stmt.setString(4, p.getAnonimo());
-            stmt.setString(5, p.getSenha());
+            stmt.setString(4, p.getTipoApoio());
+            stmt.setString(5, p.getCnpjCpf());
+            stmt.setString(6, p.getTelefone());
+            stmt.setString(7, p.getSenha());
             stmt.executeUpdate();
         }
     }
@@ -35,27 +37,33 @@ public class PatrocinadorDAO {
             novoId = rs.getInt(1);
         }
 
-        String sql = "INSERT INTO patrocinador (id_patr, nm_patr, email_patr, anonimo, senha_patr) VALUES (?, ?, ?, ?, ?)";
+        p.setIdPatrocinador(novoId);
+
+        String sql = "INSERT INTO patrocinador (id_patr, nm_patr, email_patr, tipo_apoio, cnpj_cpf, telefone_patr, senha_patr) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, novoId);
             stmt.setString(2, p.getNome());
             stmt.setString(3, p.getEmail().toLowerCase());
-            stmt.setString(4, p.getAnonimo());
-            stmt.setString(5, p.getSenha());
+            stmt.setString(4, p.getTipoApoio());
+            stmt.setString(5, p.getCnpjCpf());
+            stmt.setString(6, p.getTelefone());
+            stmt.setString(7, p.getSenha());
             stmt.executeUpdate();
         }
     }
 
     public void atualizar(Patrocinador p) throws SQLException, ClassNotFoundException {
-        String sql = "UPDATE patrocinador SET nm_patr=?, email_patr=?, anonimo=?, senha_patr=? WHERE id_patr=?";
+        String sql = "UPDATE patrocinador SET nm_patr=?, email_patr=?, tipo_apoio=?, cnpj_cpf=?, telefone_patr=?, senha_patr=? WHERE id_patr=?";
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setString(1, p.getNome());
             stmt.setString(2, p.getEmail());
-            stmt.setString(3, p.getAnonimo());
-            stmt.setString(4, p.getSenha());
-            stmt.setInt(5, p.getIdPatrocinador());
+            stmt.setString(3, p.getTipoApoio());
+            stmt.setString(4, p.getCnpjCpf());
+            stmt.setString(5, p.getTelefone());
+            stmt.setString(6, p.getSenha());
+            stmt.setInt(7, p.getIdPatrocinador());
             stmt.executeUpdate();
         }
     }
@@ -107,7 +115,9 @@ public class PatrocinadorDAO {
         p.setIdPatrocinador(rs.getInt("id_patr"));
         p.setNome(rs.getString("nm_patr"));
         p.setEmail(rs.getString("email_patr"));
-        p.setAnonimo(rs.getString("anonimo"));
+        p.setTipoApoio(rs.getString("tipo_apoio"));
+        p.setCnpjCpf(rs.getString("cnpj_cpf"));
+        p.setTelefone(rs.getString("telefone_patr"));
         p.setSenha(rs.getString("senha_patr"));
         return p;
     }

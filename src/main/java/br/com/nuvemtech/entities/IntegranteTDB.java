@@ -8,6 +8,7 @@ public class IntegranteTDB extends Pessoa {
     private int idIntegrante;
     private String cargo;
     private LocalDate dataCadastro;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
 
     public IntegranteTDB() {}
@@ -26,7 +27,6 @@ public class IntegranteTDB extends Pessoa {
     public void setCargo(String cargo) { this.cargo = cargo; }
     public LocalDate getDataCadastro() { return dataCadastro; }
     public void setDataCadastro(LocalDate dataCadastro) { this.dataCadastro = dataCadastro; }
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String getSenha() { return senha; }
     public void setSenha(String senha) { this.senha = senha; }
 

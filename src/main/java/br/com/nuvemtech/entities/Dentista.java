@@ -10,6 +10,7 @@ public class Dentista extends Pessoa {
     private String especialidade;
     private String telefone;
     private LocalDate dataCadastro;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
 
     public Dentista() {}
@@ -34,7 +35,6 @@ public class Dentista extends Pessoa {
     public void setTelefone(String telefone) { this.telefone = telefone; }
     public LocalDate getDataCadastro() { return dataCadastro; }
     public void setDataCadastro(LocalDate dataCadastro) { this.dataCadastro = dataCadastro; }
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String getSenha() { return senha; }
     public void setSenha(String senha) { this.senha = senha; }
 

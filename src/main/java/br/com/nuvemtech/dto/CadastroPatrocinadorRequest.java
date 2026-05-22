@@ -5,37 +5,25 @@ public class CadastroPatrocinadorRequest {
     private String nome;
     private String email;
     private String senha;
-    private String anonimo;
+    private String tipoApoio;
+    private String cnpjCpf;
+    private String telefone;
 
-    public String getNome() {
-        return nome;
-    }
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getSenha() { return senha; }
+    public void setSenha(String senha) { this.senha = senha; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public String getTipoApoio() { return tipoApoio; }
+    public void setTipoApoio(String tipoApoio) { this.tipoApoio = tipoApoio; }
 
-    public String getSenha() {
-        return senha;
-    }
+    public String getCnpjCpf() { return cnpjCpf; }
+    public void setCnpjCpf(String cnpjCpf) { this.cnpjCpf = cnpjCpf; }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public String getAnonimo() {
-        return anonimo;
-    }
-
-    public void setAnonimo(String anonimo) {
-        this.anonimo = anonimo;
-    }
+    public String getTelefone() { return telefone; }
+    public void setTelefone(String telefone) { this.telefone = telefone; }
 }
