@@ -5,8 +5,7 @@ public class CadastroPatrocinadorRequest {
     private String nome;
     private String email;
     private String senha;
-    private String tipoApoio;
-    private String cnpjCpf;
+    private String cpfCnpj;
     private String telefone;
 
     public String getNome() { return nome; }
@@ -18,11 +17,8 @@ public class CadastroPatrocinadorRequest {
     public String getSenha() { return senha; }
     public void setSenha(String senha) { this.senha = senha; }
 
-    public String getTipoApoio() { return tipoApoio; }
-    public void setTipoApoio(String tipoApoio) { this.tipoApoio = tipoApoio; }
-
-    public String getCnpjCpf() { return cnpjCpf; }
-    public void setCnpjCpf(String cnpjCpf) { this.cnpjCpf = cnpjCpf; }
+    public String getCpfCnpj() { return cpfCnpj; }
+    public void setCpfCnpj(String cpfCnpj) { this.cpfCnpj = cpfCnpj; }
 
     public String getTelefone() { return telefone; }
     public void setTelefone(String telefone) { this.telefone = telefone; }

@@ -10,33 +10,50 @@ import java.util.List;
 public class EvidenciaDAO {
 
     private Connection abrirConexao() throws SQLException, ClassNotFoundException {
-        return new ConexaoFactory().conexao();
+        return ConexaoFactory.conexao();
     }
 
+    
+    
     public void inserir(Evidencia e) throws SQLException, ClassNotFoundException {
-        String sql = "INSERT INTO evidencia (id_evid, ds_arquivo, dt_envio, fk_beneficiario_id_bene, fk_caso_id_caso) VALUES (?, ?, ?, ?, ?)";
+        int novoId;
+        try (Connection conexao = abrirConexao();
+             PreparedStatement stmt = conexao.prepareStatement("SELECT NVL(MAX(id_evid), 0) + 1 FROM evidencia");
+             ResultSet rs = stmt.executeQuery()) {
+            rs.next();
+            novoId = rs.getInt(1);
+        }
+
+        String sql = "INSERT INTO evidencia (id_evid, ds_arquivo, tp_arquivo, dt_envio, fk_beneficiario_id_bene, fk_caso_id_caso) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
-            stmt.setInt(1, e.getIdEvidencia());
+            stmt.setInt(1, novoId);
             stmt.setString(2, e.getArquivo());
-            stmt.setDate(3, Date.valueOf(e.getDataEnvio()));
-            stmt.setInt(4, e.getBeneficiario().getIdBeneficiario());
-            if (e.getCaso() == null || e.getCaso().getIdCaso() == 0) stmt.setNull(5, Types.INTEGER);
-            else stmt.setInt(5, e.getCaso().getIdCaso());
+            stmt.setString(3, e.getTipoArquivo());  
+            stmt.setDate(4, Date.valueOf(e.getDataEnvio()));
+            stmt.setInt(5, e.getBeneficiario().getIdBeneficiario());
+            if (e.getCaso() == null || e.getCaso().getIdCaso() == 0)
+                stmt.setNull(6, Types.INTEGER);
+            else
+                stmt.setInt(6, e.getCaso().getIdCaso());
             stmt.executeUpdate();
+            e.setIdEvidencia(novoId);
         }
     }
 
     public void atualizar(Evidencia e) throws SQLException, ClassNotFoundException {
-        String sql = "UPDATE evidencia SET ds_arquivo=?, dt_envio=?, fk_beneficiario_id_bene=?, fk_caso_id_caso=? WHERE id_evid=?";
+        String sql = "UPDATE evidencia SET ds_arquivo=?, tp_arquivo=?, dt_envio=?, fk_beneficiario_id_bene=?, fk_caso_id_caso=? WHERE id_evid=?";
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setString(1, e.getArquivo());
-            stmt.setDate(2, Date.valueOf(e.getDataEnvio()));
-            stmt.setInt(3, e.getBeneficiario().getIdBeneficiario());
-            if (e.getCaso() == null || e.getCaso().getIdCaso() == 0) stmt.setNull(4, Types.INTEGER);
-            else stmt.setInt(4, e.getCaso().getIdCaso());
-            stmt.setInt(5, e.getIdEvidencia());
+            stmt.setString(2, e.getTipoArquivo());
+            stmt.setDate(3, Date.valueOf(e.getDataEnvio()));
+            stmt.setInt(4, e.getBeneficiario().getIdBeneficiario());
+            if (e.getCaso() == null || e.getCaso().getIdCaso() == 0)
+                stmt.setNull(5, Types.INTEGER);
+            else
+                stmt.setInt(5, e.getCaso().getIdCaso());
+            stmt.setInt(6, e.getIdEvidencia());
             stmt.executeUpdate();
         }
     }
@@ -74,6 +91,7 @@ public class EvidenciaDAO {
         Evidencia e = new Evidencia();
         e.setIdEvidencia(rs.getInt("id_evid"));
         e.setArquivo(rs.getString("ds_arquivo"));
+        e.setTipoArquivo(rs.getString("tp_arquivo"));
         Date data = rs.getDate("dt_envio");
         if (data != null) e.setDataEnvio(data.toLocalDate());
         e.setBeneficiario(RelacionamentoDAO.buscarBeneficiario(conexao, rs.getInt("fk_beneficiario_id_bene")));

@@ -21,16 +21,16 @@ public class PatrocinadorBO {
     }
 
     public void inserirBo(Patrocinador obj) throws SQLException, ClassNotFoundException {
-        validar(obj);
+        validarDados(obj);
         new PatrocinadorDAO().inserir(obj);
     }
 
     public void cadastrarBo(Patrocinador obj) throws SQLException, ClassNotFoundException {
         if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
-        if (obj.getNome() == null || obj.getNome().isBlank()) throw new RegraNegocioException("Nome obrigatorio.");
-        if (obj.getEmail() == null || obj.getEmail().isBlank()) throw new RegraNegocioException("Email obrigatorio.");
-        if (obj.getSenha() == null || obj.getSenha().isBlank()) throw new RegraNegocioException("Senha obrigatoria.");
-        if (obj.getCnpjCpf() == null || obj.getCnpjCpf().isBlank()) throw new RegraNegocioException("CNPJ/CPF obrigatorio.");
+        if (obj.getNome() == null || obj.getNome().isBlank())
+            throw new RegraNegocioException("Nome obrigatorio.");
+        if (obj.getSenha() == null || obj.getSenha().isBlank())
+            throw new RegraNegocioException("Senha obrigatoria.");
         new PatrocinadorDAO().cadastrar(obj);
     }
 
@@ -39,18 +39,25 @@ public class PatrocinadorBO {
         new PatrocinadorDAO().atualizar(obj);
     }
 
-    public void deletarBo(int id) throws SQLException, ClassNotFoundException {
-        new PatrocinadorDAO().deletar(id);
-    }
-
     public Patrocinador loginBo(String email, String senha) throws SQLException, ClassNotFoundException {
         Patrocinador obj = new PatrocinadorDAO().login(email, senha);
         if (obj == null) throw new NotFoundException("Email ou senha invalidos.");
         return obj;
     }
 
+    public void deletarBo(int id) throws SQLException, ClassNotFoundException {
+        new PatrocinadorDAO().deletar(id);
+    }
+
+    private void validarDados(Patrocinador obj) {
+        if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
+        if (obj.getNome() == null || obj.getNome().isBlank())
+            throw new RegraNegocioException("Nome obrigatorio.");
+    }
+
     private void validar(Patrocinador obj) {
         if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
         if (obj.getIdPatrocinador() <= 0) throw new RegraNegocioException("ID invalido.");
+        validarDados(obj);
     }
 }

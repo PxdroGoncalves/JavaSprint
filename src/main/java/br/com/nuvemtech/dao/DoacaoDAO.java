@@ -10,14 +10,22 @@ import java.util.List;
 public class DoacaoDAO {
 
     private Connection abrirConexao() throws SQLException, ClassNotFoundException {
-        return new ConexaoFactory().conexao();
+        return ConexaoFactory.conexao();
     }
 
     public void inserir(Doacao d) throws SQLException, ClassNotFoundException {
+        int novoId;
+        try (Connection conexao = abrirConexao();
+             PreparedStatement stmt = conexao.prepareStatement("SELECT NVL(MAX(id_doac), 0) + 1 FROM doacao");
+             ResultSet rs = stmt.executeQuery()) {
+            rs.next();
+            novoId = rs.getInt(1);
+        }
+
         String sql = "INSERT INTO doacao (id_doac, tp_doac, vl_doac, ds_equipamento, dt_doac, fk_patrocinador_id_patr) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
-            stmt.setInt(1, d.getIdDoacao());
+            stmt.setInt(1, novoId);
             stmt.setString(2, d.getTipo());
             if (d.getValor() == null) stmt.setNull(3, Types.NUMERIC);
             else stmt.setDouble(3, d.getValor());
@@ -25,6 +33,7 @@ public class DoacaoDAO {
             stmt.setDate(5, Date.valueOf(d.getDataDoacao()));
             stmt.setInt(6, d.getPatrocinador().getIdPatrocinador());
             stmt.executeUpdate();
+            d.setIdDoacao(novoId);
         }
     }
 

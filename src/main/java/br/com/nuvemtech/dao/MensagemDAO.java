@@ -10,29 +10,52 @@ import java.util.List;
 public class MensagemDAO {
 
     private Connection abrirConexao() throws SQLException, ClassNotFoundException {
-        return new ConexaoFactory().conexao();
+        return ConexaoFactory.conexao();
     }
 
+    
+    
+    
     public void inserir(Mensagem m) throws SQLException, ClassNotFoundException {
-        String sql = "INSERT INTO mensagem (id_mens, dt_mens, tx_mens, tp_remetente,fk_beneficiario_id_bene, fk_dentista_id_dent, fk_integrante_id_integ)VALUES (?, ?, ?, ?, ?, ?, ?)";
+        int novoId;
+        try (Connection conexao = abrirConexao();
+             PreparedStatement stmt = conexao.prepareStatement("SELECT NVL(MAX(id_mens), 0) + 1 FROM mensagem");
+             ResultSet rs = stmt.executeQuery()) {
+            rs.next();
+            novoId = rs.getInt(1);
+        }
+
+        String sql = "INSERT INTO mensagem (id_mens, dt_mens, tx_mens, tp_remetente, fk_beneficiario_id_bene, fk_dentista_id_dent, fk_integrante_id_integ) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
-            stmt.setInt(1, m.getIdMensagem());
-            stmt.setTimestamp(2, Timestamp.valueOf(m.getDataEnvio()));
+            stmt.setInt(1, novoId);
+            
+            stmt.setDate(2, m.getDataEnvio() != null
+                    ? Date.valueOf(m.getDataEnvio().toLocalDate())
+                    : Date.valueOf(java.time.LocalDate.now()));
             stmt.setString(3, m.getTexto());
             stmt.setString(4, m.getRemetente());
-            stmt.setNull(5, Types.INTEGER);
-            stmt.setNull(6, Types.INTEGER);
-            stmt.setNull(7, Types.INTEGER);
+            if (m.getBeneficiario() != null && m.getBeneficiario().getIdBeneficiario() > 0)
+                stmt.setInt(5, m.getBeneficiario().getIdBeneficiario());
+            else stmt.setNull(5, Types.INTEGER);
+            if (m.getDentista() != null && m.getDentista().getIdDentista() > 0)
+                stmt.setInt(6, m.getDentista().getIdDentista());
+            else stmt.setNull(6, Types.INTEGER);
+            if (m.getIntegrante() != null && m.getIntegrante().getIdIntegrante() > 0)
+                stmt.setInt(7, m.getIntegrante().getIdIntegrante());
+            else stmt.setNull(7, Types.INTEGER);
             stmt.executeUpdate();
+            m.setIdMensagem(novoId);
         }
     }
 
     public void atualizar(Mensagem m) throws SQLException, ClassNotFoundException {
-        String sql = "UPDATE mensagem SET dt_mens=?, tx_mens=?, tp_remetente=?,fk_beneficiario_id_bene=?,fk_dentista_id_dent=?,fk_integrante_id_integ=? WHERE id_mens=?";
+        String sql = "UPDATE mensagem SET dt_mens=?, tx_mens=?, tp_remetente=?, fk_beneficiario_id_bene=?, fk_dentista_id_dent=?, fk_integrante_id_integ=? WHERE id_mens=?";
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
-            stmt.setTimestamp(1, Timestamp.valueOf(m.getDataEnvio()));
+            stmt.setDate(1, m.getDataEnvio() != null
+                    ? Date.valueOf(m.getDataEnvio().toLocalDate())
+                    : Date.valueOf(java.time.LocalDate.now()));
             stmt.setString(2, m.getTexto());
             stmt.setString(3, m.getRemetente());
             if (m.getBeneficiario() != null) stmt.setInt(4, m.getBeneficiario().getIdBeneficiario());
@@ -80,8 +103,9 @@ public class MensagemDAO {
         m.setIdMensagem(rs.getInt("id_mens"));
         m.setTexto(rs.getString("tx_mens"));
         m.setRemetente(rs.getString("tp_remetente"));
-        Timestamp data = rs.getTimestamp("dt_mens");
-        if (data != null) m.setDataEnvio(data.toLocalDateTime());
+        
+        Date data = rs.getDate("dt_mens");
+        if (data != null) m.setDataEnvio(data.toLocalDate().atStartOfDay());
         if (rs.getObject("fk_beneficiario_id_bene") != null)
             m.setBeneficiario(RelacionamentoDAO.buscarBeneficiario(conexao, rs.getInt("fk_beneficiario_id_bene")));
         if (rs.getObject("fk_dentista_id_dent") != null)

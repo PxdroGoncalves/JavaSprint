@@ -14,7 +14,8 @@ public class Caso {
 
     public Caso() {}
 
-    public Caso(int idCaso, LocalDate dataAbertura, LocalDate dataFechamento, String status, Beneficiario beneficiario, Dentista dentista, IntegranteTDB integrante, boolean temDiagnostico) {
+    public Caso(int idCaso, LocalDate dataAbertura, LocalDate dataFechamento, String status,
+                Beneficiario beneficiario, Dentista dentista, IntegranteTDB integrante, boolean temDiagnostico) {
         this.idCaso = idCaso;
         this.dataAbertura = dataAbertura;
         this.dataFechamento = dataFechamento;
@@ -42,14 +43,15 @@ public class Caso {
     public boolean isTemDiagnostico() { return temDiagnostico; }
     public void setTemDiagnostico(boolean temDiagnostico) { this.temDiagnostico = temDiagnostico; }
 
+    
     public void abrir() {
-        this.status = "ABERTO";
+        this.status = "PENDENTE";
         if (this.dataAbertura == null) this.dataAbertura = LocalDate.now();
     }
 
     public void enviarPedido(Dentista dentista) {
         this.dentista = dentista;
-        this.status = "PENDENTE";
+        this.status = "EM_ANDAMENTO";
     }
 
     public void registrarDiagnostico() {
@@ -57,15 +59,17 @@ public class Caso {
         this.status = "EM_ANDAMENTO";
     }
 
+    
     public boolean fechar() {
         if (!temDiagnostico) return false;
-        this.status = "FECHADO";
+        this.status = "CONCLUIDO";
         this.dataFechamento = LocalDate.now();
         return true;
     }
 
     @Override
     public String toString() {
-        return "\n\n=== CASO ===\nID: " + idCaso + "\nStatus: " + status + "\nData Abertura: " + dataAbertura + "\nData Fechamento: " + dataFechamento;
+        return "\n\n=== CASO ===\nID: " + idCaso + "\nStatus: " + status +
+               "\nData Abertura: " + dataAbertura + "\nData Fechamento: " + dataFechamento;
     }
 }

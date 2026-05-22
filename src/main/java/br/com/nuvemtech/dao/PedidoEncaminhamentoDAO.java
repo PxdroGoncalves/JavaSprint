@@ -13,28 +13,41 @@ public class PedidoEncaminhamentoDAO {
         return new ConexaoFactory().conexao();
     }
 
+    
+    
     public void inserir(PedidoEncaminhamento p) throws SQLException, ClassNotFoundException {
-        String sql = "INSERT INTO pedido_encaminhamento (id_pedido, dt_pedido, st_pedido, fk_caso_id_caso, fk_dentista_id_dent) VALUES (?, ?, ?, ?, ?)";
+        int novoId;
+        try (Connection conexao = abrirConexao();
+             PreparedStatement stmt = conexao.prepareStatement("SELECT NVL(MAX(id_pedido), 0) + 1 FROM pedido_encaminhamento");
+             ResultSet rs = stmt.executeQuery()) {
+            rs.next();
+            novoId = rs.getInt(1);
+        }
+
+        String sql = "INSERT INTO pedido_encaminhamento (id_pedido, dt_pedido, st_pedido, fk_caso_id_caso, fk_dentista_id_dent, fk_integrante_id_integ) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
-            stmt.setInt(1, p.getIdPedido());
+            stmt.setInt(1, novoId);
             stmt.setDate(2, Date.valueOf(p.getDataPedido()));
             stmt.setString(3, p.getStatus());
             stmt.setInt(4, p.getCaso().getIdCaso());
             stmt.setInt(5, p.getDentista().getIdDentista());
+            stmt.setInt(6, p.getIntegrante().getIdIntegrante());
             stmt.executeUpdate();
+            p.setIdPedido(novoId);
         }
     }
 
     public void atualizar(PedidoEncaminhamento p) throws SQLException, ClassNotFoundException {
-        String sql = "UPDATE pedido_encaminhamento SET dt_pedido=?, st_pedido=?, fk_caso_id_caso=?, fk_dentista_id_dent=? WHERE id_pedido=?";
+        String sql = "UPDATE pedido_encaminhamento SET dt_pedido=?, st_pedido=?, fk_caso_id_caso=?, fk_dentista_id_dent=?, fk_integrante_id_integ=? WHERE id_pedido=?";
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setDate(1, Date.valueOf(p.getDataPedido()));
             stmt.setString(2, p.getStatus());
             stmt.setInt(3, p.getCaso().getIdCaso());
             stmt.setInt(4, p.getDentista().getIdDentista());
-            stmt.setInt(5, p.getIdPedido());
+            stmt.setInt(5, p.getIntegrante().getIdIntegrante());
+            stmt.setInt(6, p.getIdPedido());
             stmt.executeUpdate();
         }
     }
@@ -76,6 +89,7 @@ public class PedidoEncaminhamentoDAO {
         p.setStatus(rs.getString("st_pedido"));
         p.setCaso(RelacionamentoDAO.buscarCaso(conexao, rs.getInt("fk_caso_id_caso")));
         p.setDentista(RelacionamentoDAO.buscarDentista(conexao, rs.getInt("fk_dentista_id_dent")));
+        p.setIntegrante(RelacionamentoDAO.buscarIntegrante(conexao, rs.getInt("fk_integrante_id_integ")));
         return p;
     }
 }
