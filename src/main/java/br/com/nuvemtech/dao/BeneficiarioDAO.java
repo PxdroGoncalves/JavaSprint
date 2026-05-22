@@ -51,6 +51,7 @@ public class BeneficiarioDAO {
             stmt.setDate(8, Date.valueOf(b.getDataCadastro() != null ? b.getDataCadastro() : java.time.LocalDate.now()));
             stmt.setString(9, b.getSenha());
             stmt.executeUpdate();
+            b.setIdBeneficiario(novoId);
         }
     }
 

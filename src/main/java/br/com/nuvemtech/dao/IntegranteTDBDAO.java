@@ -45,6 +45,7 @@ public class IntegranteTDBDAO {
             stmt.setDate(5, Date.valueOf(i.getDataCadastro() != null ? i.getDataCadastro() : java.time.LocalDate.now()));
             stmt.setString(6, i.getSenha());
             stmt.executeUpdate();
+            i.setIdIntegrante(novoId);
         }
     }
 

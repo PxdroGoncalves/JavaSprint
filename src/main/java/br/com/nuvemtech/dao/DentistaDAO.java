@@ -49,6 +49,7 @@ public class DentistaDAO {
             stmt.setDate(7, Date.valueOf(d.getDataCadastro() != null ? d.getDataCadastro() : java.time.LocalDate.now()));
             stmt.setString(8, d.getSenha());
             stmt.executeUpdate();
+            d.setIdDentista(novoId);
         }
     }
 
