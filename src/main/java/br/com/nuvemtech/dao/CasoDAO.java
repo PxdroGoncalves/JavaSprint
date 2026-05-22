@@ -81,10 +81,48 @@ public class CasoDAO {
     }
 
     public void deletar(int id) throws SQLException, ClassNotFoundException {
-        try (Connection conexao = abrirConexao();
-             PreparedStatement stmt = conexao.prepareStatement("DELETE FROM caso WHERE id_caso=?")) {
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
+        try (Connection conexao = abrirConexao()) {
+            conexao.setAutoCommit(false);
+            try {
+                // 1. mensagem
+                try (PreparedStatement s = conexao.prepareStatement(
+                        "DELETE FROM mensagem WHERE fk_caso_id_caso = ?")) {
+                    s.setInt(1, id); s.executeUpdate();
+                }
+                // 2. evidencia
+                try (PreparedStatement s = conexao.prepareStatement(
+                        "DELETE FROM evidencia WHERE fk_caso_id_caso = ?")) {
+                    s.setInt(1, id); s.executeUpdate();
+                }
+                // 3. pedido_encaminhamento
+                try (PreparedStatement s = conexao.prepareStatement(
+                        "DELETE FROM pedido_encaminhamento WHERE fk_caso_id_caso = ?")) {
+                    s.setInt(1, id); s.executeUpdate();
+                }
+                // 4. historico_status
+                try (PreparedStatement s = conexao.prepareStatement(
+                        "DELETE FROM historico_status WHERE fk_caso_id_caso = ?")) {
+                    s.setInt(1, id); s.executeUpdate();
+                }
+                // 5. diagnostico
+                try (PreparedStatement s = conexao.prepareStatement(
+                        "DELETE FROM diagnostico WHERE fk_caso_id_caso = ?")) {
+                    s.setInt(1, id); s.executeUpdate();
+                }
+                // 6. caso (pai — agora seguro)
+                try (PreparedStatement s = conexao.prepareStatement(
+                        "DELETE FROM caso WHERE id_caso = ?")) {
+                    s.setInt(1, id); s.executeUpdate();
+                }
+
+                conexao.commit();
+
+            } catch (SQLException e) {
+                conexao.rollback();
+                throw e;
+            } finally {
+                conexao.setAutoCommit(true);
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 package br.com.nuvemtech.resources;
 
+import br.com.nuvemtech.entities.IntegranteTDB;
 import br.com.nuvemtech.services.PedidoEncaminhamentoService;
 import br.com.nuvemtech.entities.PedidoEncaminhamento;
 import jakarta.ws.rs.*;
@@ -26,7 +27,17 @@ public class PedidoEncaminhamentoResource {
     }
 
     @POST
-    public Response inserir(PedidoEncaminhamento obj, @Context UriInfo uriInfo) throws SQLException, ClassNotFoundException {
+    public Response inserir(PedidoEncaminhamento obj,
+                            @Context UriInfo uriInfo,
+                            @HeaderParam("Authorization") String authHeader) throws SQLException, ClassNotFoundException {
+
+        if (obj.getIntegrante() == null || obj.getIntegrante().getIdIntegrante() <= 0) {
+            int idIntegrante = extrairIdIntegrante(authHeader);
+            IntegranteTDB integrante = new IntegranteTDB();
+            integrante.setIdIntegrante(idIntegrante);
+            obj.setIntegrante(integrante);
+        }
+
         service.inserir(obj);
         Object salvo = service.buscarPorId(obj.getIdPedido());
         UriBuilder builder = uriInfo.getAbsolutePathBuilder();
@@ -61,5 +72,14 @@ public class PedidoEncaminhamentoResource {
     public Response deletar(@PathParam("id") int id) throws SQLException, ClassNotFoundException {
         service.deletar(id);
         return Response.noContent().build();
+    }
+
+    private int extrairIdIntegrante(String authHeader) {
+        if (authHeader != null && authHeader.startsWith("integrante-")) {
+            try {
+                return Integer.parseInt(authHeader.substring("integrante-".length()).trim());
+            } catch (NumberFormatException ignored) {}
+        }
+        return 1; // fallback: integrante padrão do sistema
     }
 }
