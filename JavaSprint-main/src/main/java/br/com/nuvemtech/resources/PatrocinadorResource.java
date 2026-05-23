@@ -88,3 +88,4 @@ public class PatrocinadorResource {
         return Response.ok(obj).build();
     }
 }
+
