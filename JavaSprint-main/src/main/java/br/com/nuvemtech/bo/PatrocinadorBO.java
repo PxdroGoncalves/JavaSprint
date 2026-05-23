@@ -1,0 +1,86 @@
+package br.com.nuvemtech.bo;
+
+import br.com.nuvemtech.dao.PatrocinadorDAO;
+import br.com.nuvemtech.entities.Patrocinador;
+import br.com.nuvemtech.exceptions.NotFoundException;
+import br.com.nuvemtech.exceptions.RegraNegocioException;
+
+import java.sql.SQLException;
+import java.util.List;
+
+public class PatrocinadorBO {
+
+    public List<Patrocinador> selecionarBo() throws SQLException, ClassNotFoundException {
+        return new PatrocinadorDAO().selecionar();
+    }
+
+    public Patrocinador buscarPorIdBo(int id) throws SQLException, ClassNotFoundException {
+        Patrocinador obj = new PatrocinadorDAO().buscarPorId(id);
+        if (obj == null)
+            throw new NotFoundException("Registro nao encontrado.");
+        return obj;
+    }
+
+    public void inserirBo(Patrocinador obj) throws SQLException, ClassNotFoundException {
+        validarDados(obj);
+        new PatrocinadorDAO().inserir(obj);
+    }
+
+    public void cadastrarBo(Patrocinador obj) throws SQLException, ClassNotFoundException {
+        validarDados(obj);
+        new PatrocinadorDAO().cadastrar(obj);
+    }
+
+    public void atualizarBo(Patrocinador obj) throws SQLException, ClassNotFoundException {
+        validar(obj);
+        new PatrocinadorDAO().atualizar(obj);
+    }
+
+    public Patrocinador loginBo(String email, String senha)
+            throws SQLException, ClassNotFoundException {
+        Patrocinador obj =
+                new PatrocinadorDAO().login(email.toLowerCase(), senha);
+        if (obj == null)
+            throw new NotFoundException("Email ou senha invalidos.");
+        return obj;
+    }
+
+    public void deletarBo(int id) throws SQLException, ClassNotFoundException {
+        new PatrocinadorDAO().deletar(id);
+    }
+
+    private void validarDados(Patrocinador obj) {
+
+        if (obj == null)
+            throw new RegraNegocioException("Dados obrigatorios nao informados.");
+
+        if (obj.getNome() == null)
+            throw new RegraNegocioException("Nome obrigatorio.");
+
+        if (obj.getEmail() == null)
+            throw new RegraNegocioException("Email obrigatorio.");
+
+        if (obj.getSenha() == null)
+            throw new RegraNegocioException("Senha obrigatoria.");
+
+        if (obj.getCpfCnpj() == null)
+            throw new RegraNegocioException("CPF/CNPJ obrigatorio.");
+
+        if (!(obj.getCpfCnpj().length() == 11 ||
+                obj.getCpfCnpj().length() == 14))
+            throw new RegraNegocioException(
+                    "CPF/CNPJ deve conter 11 ou 14 numeros."
+            );
+    }
+
+    private void validar(Patrocinador obj) {
+
+        if (obj == null)
+            throw new RegraNegocioException("Dados obrigatorios nao informados.");
+
+        if (obj.getIdPatrocinador() <= 0)
+            throw new RegraNegocioException("ID invalido.");
+
+        validarDados(obj);
+    }
+}
