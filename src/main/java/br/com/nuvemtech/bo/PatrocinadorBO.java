@@ -16,7 +16,10 @@ public class PatrocinadorBO {
 
     public Patrocinador buscarPorIdBo(int id) throws SQLException, ClassNotFoundException {
         Patrocinador obj = new PatrocinadorDAO().buscarPorId(id);
-        if (obj == null) throw new NotFoundException("Registro nao encontrado.");
+
+        if (obj == null)
+            throw new NotFoundException("Registro nao encontrado.");
+
         return obj;
     }
 
@@ -26,11 +29,7 @@ public class PatrocinadorBO {
     }
 
     public void cadastrarBo(Patrocinador obj) throws SQLException, ClassNotFoundException {
-        if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
-        if (obj.getNome() == null || obj.getNome().isBlank())
-            throw new RegraNegocioException("Nome obrigatorio.");
-        if (obj.getSenha() == null || obj.getSenha().isBlank())
-            throw new RegraNegocioException("Senha obrigatoria.");
+        validarDados(obj);
         new PatrocinadorDAO().cadastrar(obj);
     }
 
@@ -39,9 +38,15 @@ public class PatrocinadorBO {
         new PatrocinadorDAO().atualizar(obj);
     }
 
-    public Patrocinador loginBo(String email, String senha) throws SQLException, ClassNotFoundException {
-        Patrocinador obj = new PatrocinadorDAO().login(email, senha);
-        if (obj == null) throw new NotFoundException("Email ou senha invalidos.");
+    public Patrocinador loginBo(String email, String senha)
+            throws SQLException, ClassNotFoundException {
+
+        Patrocinador obj =
+                new PatrocinadorDAO().login(email.toLowerCase(), senha);
+
+        if (obj == null)
+            throw new NotFoundException("Email ou senha invalidos.");
+
         return obj;
     }
 
@@ -50,20 +55,37 @@ public class PatrocinadorBO {
     }
 
     private void validarDados(Patrocinador obj) {
-        if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
-        if (obj.getNome() == null || obj.getNome().isBlank())
+
+        if (obj == null)
+            throw new RegraNegocioException("Dados obrigatorios nao informados.");
+
+        if (obj.getNome() == null)
             throw new RegraNegocioException("Nome obrigatorio.");
-        if (obj.getEmail() == null || obj.getEmail().isBlank())
+
+        if (obj.getEmail() == null)
             throw new RegraNegocioException("Email obrigatorio.");
-        if (obj.getSenha() == null || obj.getSenha().isBlank())
+
+        if (obj.getSenha() == null)
             throw new RegraNegocioException("Senha obrigatoria.");
-        if (obj.getCpfCnpj() == null || !(obj.getCpfCnpj().length() == 11 || obj.getCpfCnpj().length() == 14))
-            throw new RegraNegocioException("CPF/CNPJ deve conter 11 ou 14 numeros.");
+
+        if (obj.getCpfCnpj() == null)
+            throw new RegraNegocioException("CPF/CNPJ obrigatorio.");
+
+        if (!(obj.getCpfCnpj().length() == 11
+                || obj.getCpfCnpj().length() == 14))
+            throw new RegraNegocioException(
+                    "CPF/CNPJ deve conter 11 ou 14 numeros."
+            );
     }
 
     private void validar(Patrocinador obj) {
-        if (obj == null) throw new RegraNegocioException("Dados obrigatorios nao informados.");
-        if (obj.getIdPatrocinador() <= 0) throw new RegraNegocioException("ID invalido.");
+
+        if (obj == null)
+            throw new RegraNegocioException("Dados obrigatorios nao informados.");
+
+        if (obj.getIdPatrocinador() <= 0)
+            throw new RegraNegocioException("ID invalido.");
+
         validarDados(obj);
     }
 }
