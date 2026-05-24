@@ -44,6 +44,7 @@ public class DoacaoBO {
     private void validarDados(Doacao d) {
         if (d == null) throw new RegraNegocioException("Dados da doacao nao informados.");
         if (d.getTipo() == null || d.getTipo().isBlank()) throw new RegraNegocioException("Tipo da doacao obrigatorio.");
+        d.setTipo(d.getTipo().trim().toUpperCase());
         if (d.getTipo().equalsIgnoreCase("MONETARIO") && (d.getValor() == null || d.getValor() <= 0))
             throw new RegraNegocioException("Doacao monetaria precisa ter valor maior que zero.");
         if (d.getTipo().equalsIgnoreCase("EQUIPAMENTO") && (d.getDescricaoEquipamento() == null || d.getDescricaoEquipamento().isBlank()))
