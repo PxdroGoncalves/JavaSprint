@@ -68,11 +68,15 @@ public class PatrocinadorBO {
         if (obj.getSenha() == null)
             throw new RegraNegocioException("Senha obrigatoria.");
 
-        if (obj.getCpfCnpj() == null)
+        if (obj.getCpfCnpj() == null || obj.getCpfCnpj().isBlank())
             throw new RegraNegocioException("CPF/CNPJ obrigatorio.");
 
-        if (!(obj.getCpfCnpj().length() == 11
-                || obj.getCpfCnpj().length() == 14))
+        // Remove formatacao (pontos, tracos, barras) antes de validar
+        String cpfCnpjLimpo = obj.getCpfCnpj().replaceAll("[^0-9]", "");
+        obj.setCpfCnpj(cpfCnpjLimpo);
+
+        if (!(cpfCnpjLimpo.length() == 11
+                || cpfCnpjLimpo.length() == 14))
             throw new RegraNegocioException(
                     "CPF/CNPJ deve conter 11 ou 14 numeros."
             );
