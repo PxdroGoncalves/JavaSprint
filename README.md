@@ -1,24 +1,38 @@
 # NuvemTech - Sprint 4 Java
 
-Projeto final de Domain Driven Design Using Java desenvolvido com Quarkus, JDBC, Oracle Database e API RESTful.
+Projeto de Domain Driven Design Using Java desenvolvido com Quarkus, JDBC, Oracle Database e API RESTful.
 
 ## Objetivo
 
 A solução gerencia o fluxo de atendimento social da NuvemTech/Turma do Bem, permitindo cadastrar beneficiários, dentistas, integrantes, casos, diagnósticos, pedidos de encaminhamento, patrocinadores, doações, evidências, mensagens e histórico de status.
 
-## O que foi ajustado
+## Tecnologias
 
-- O projeto foi montado usando a base Quarkus como padrão de estrutura.
-- Datas, telefone, senha, integrante e dentista agora vêm pelo JSON ou são definidos por regra de negócio quando fizer sentido.
-- A API REST foi criada para as classes principais do projeto.
-- Foram criadas camadas entities, dao, bo, resources, exceptions e conexoes.
-- Foram adicionadas regras de negócio para abrir caso, enviar pedido, registrar diagnóstico e fechar caso.
+- Java 17+
+- Quarkus
+- JDBC
+- Oracle Database
+- API RESTful
+
+## Arquitetura
+
+Fluxo usado no projeto:
+
+```
+Resource -> Service -> BO -> DAO -> Banco de Dados
+```
+
+- `Resource`: recebe as chamadas REST
+- `Service`: centraliza as chamadas usadas pela API
+- `BO`: valida e aplica as regras de negócio
+- `DAO`: executa os comandos SQL no Oracle
+- `Entity`: representa os dados do sistema
 
 ## Como rodar
 
 Configure seu usuário e senha Oracle em:
 
-```text
+```
 src/main/java/br/com/nuvemtech/conexoes/ConexaoFactory.java
 ```
 
@@ -28,56 +42,161 @@ Depois execute:
 mvnw.cmd quarkus:dev
 ```
 
-No navegador, para ver se a API subiu:
+Para ver se a API subiu:
 
-```text
+```
 http://localhost:8080/
 ```
 
 Para testar os endpoints pelo Swagger:
 
-```text
+```
 http://localhost:8080/q/swagger-ui
 ```
 
-## Endpoints principais
+## Endpoints
+
+### Geral
 
 | Método | Endpoint | Função |
-|---|---|---|
-| GET | / | Tela inicial da API com lista de endpoints |
+|--------|----------|--------|
+| GET | / | Tela inicial com lista de endpoints |
+
+### Beneficiários
+
+| Método | Endpoint | Função |
+|--------|----------|--------|
 | GET | /beneficiarios | Lista beneficiários |
-| GET | /beneficiarios/{id} | Busca beneficiário |
-| POST | /beneficiarios | Cadastra beneficiário |
+| GET | /beneficiarios/{id} | Busca beneficiário por ID |
+| POST | /beneficiarios | Insere beneficiário |
+| POST | /beneficiarios/cadastrar | Cadastra beneficiário com senha |
+| POST | /beneficiarios/login | Login do beneficiário |
 | PUT | /beneficiarios/{id} | Atualiza beneficiário |
 | DELETE | /beneficiarios/{id} | Remove beneficiário |
+
+### Dentistas
+
+| Método | Endpoint | Função |
+|--------|----------|--------|
 | GET | /dentistas | Lista dentistas |
-| POST | /dentistas | Cadastra dentista |
+| GET | /dentistas/{id} | Busca dentista por ID |
+| POST | /dentistas | Insere dentista |
+| POST | /dentistas/cadastrar | Cadastra dentista com senha |
+| POST | /dentistas/login | Login do dentista |
+| PUT | /dentistas/{id} | Atualiza dentista |
+| DELETE | /dentistas/{id} | Remove dentista |
+
+### Integrantes TDB
+
+| Método | Endpoint | Função |
+|--------|----------|--------|
 | GET | /integrantes | Lista integrantes |
-| POST | /integrantes | Cadastra integrante |
+| GET | /integrantes/{id} | Busca integrante por ID |
+| POST | /integrantes | Insere integrante |
+| POST | /integrantes/cadastrar | Cadastra integrante com senha |
+| POST | /integrantes/login | Login do integrante |
+| PUT | /integrantes/{id} | Atualiza integrante |
+| DELETE | /integrantes/{id} | Remove integrante |
+
+### Patrocinadores
+
+| Método | Endpoint | Função |
+|--------|----------|--------|
+| GET | /patrocinadores | Lista patrocinadores |
+| GET | /patrocinadores/{id} | Busca patrocinador por ID |
+| POST | /patrocinadores | Insere patrocinador |
+| POST | /patrocinadores/cadastrar | Cadastra patrocinador com senha |
+| POST | /patrocinadores/login | Login do patrocinador |
+| PUT | /patrocinadores/{id} | Atualiza patrocinador |
+| DELETE | /patrocinadores/{id} | Remove patrocinador |
+
+### Casos
+
+| Método | Endpoint | Função |
+|--------|----------|--------|
 | GET | /casos | Lista casos |
+| GET | /casos/{id} | Busca caso por ID |
 | POST | /casos | Abre caso |
+| PUT | /casos/{id} | Atualiza caso |
 | PUT | /casos/{idCaso}/enviar-pedido | Envia caso para dentista |
 | PUT | /casos/{idCaso}/fechar | Fecha caso se existir diagnóstico |
-| GET | /diagnosticos | Lista diagnósticos |
-| POST | /diagnosticos | Registra diagnóstico |
-| GET | /historicos-status | Lista histórico |
-| POST | /historicos-status | Cadastra histórico |
-| GET | /pedidos-encaminhamento | Lista pedidos |
-| POST | /pedidos-encaminhamento | Cadastra pedido |
-| GET | /patrocinadores | Lista patrocinadores |
-| POST | /patrocinadores | Cadastra patrocinador |
-| GET | /doacoes | Lista doações |
-| POST | /doacoes | Cadastra doação |
-| GET | /evidencias | Lista evidências |
-| POST | /evidencias | Cadastra evidência |
-| GET | /mensagens | Lista mensagens |
-| POST | /mensagens | Cadastra mensagem |
+| DELETE | /casos/{id} | Remove caso |
 
-## Exemplo de Beneficiário
+### Diagnósticos
+
+| Método | Endpoint | Função |
+|--------|----------|--------|
+| GET | /diagnosticos | Lista diagnósticos |
+| GET | /diagnosticos/{id} | Busca diagnóstico por ID |
+| POST | /diagnosticos | Registra diagnóstico |
+| PUT | /diagnosticos/{id} | Atualiza diagnóstico |
+| DELETE | /diagnosticos/{id} | Remove diagnóstico |
+
+### Pedidos de Encaminhamento
+
+| Método | Endpoint | Função |
+|--------|----------|--------|
+| GET | /pedidos-encaminhamento | Lista pedidos |
+| GET | /pedidos-encaminhamento/{id} | Busca pedido por ID |
+| POST | /pedidos-encaminhamento | Cadastra pedido |
+| PUT | /pedidos-encaminhamento/{id} | Atualiza pedido |
+| PUT | /pedidos-encaminhamento/{id}/aceitar | Aceita pedido |
+| PUT | /pedidos-encaminhamento/{id}/recusar | Recusa pedido |
+| DELETE | /pedidos-encaminhamento/{id} | Remove pedido |
+
+### Doações
+
+| Método | Endpoint | Função |
+|--------|----------|--------|
+| GET | /doacoes | Lista doações |
+| GET | /doacoes/{id} | Busca doação por ID |
+| POST | /doacoes | Cadastra doação |
+| PUT | /doacoes/{id} | Atualiza doação |
+| DELETE | /doacoes/{id} | Remove doação |
+
+### Evidências
+
+| Método | Endpoint | Função |
+|--------|----------|--------|
+| GET | /evidencias | Lista evidências |
+| GET | /evidencias/{id} | Busca evidência por ID |
+| POST | /evidencias | Cadastra evidência |
+| PUT | /evidencias/{id} | Atualiza evidência |
+| DELETE | /evidencias/{id} | Remove evidência |
+
+### Mensagens
+
+| Método | Endpoint | Função |
+|--------|----------|--------|
+| GET | /mensagens | Lista mensagens |
+| GET | /mensagens/{id} | Busca mensagem por ID |
+| POST | /mensagens | Cadastra mensagem |
+| PUT | /mensagens/{id} | Atualiza mensagem |
+| DELETE | /mensagens/{id} | Remove mensagem |
+
+### Histórico de Status
+
+| Método | Endpoint | Função |
+|--------|----------|--------|
+| GET | /historicos-status | Lista histórico |
+| GET | /historicos-status/{id} | Busca histórico por ID |
+| POST | /historicos-status | Cadastra histórico |
+| PUT | /historicos-status/{id} | Atualiza histórico |
+| DELETE | /historicos-status/{id} | Remove histórico |
+
+### Endereços (ViaCEP)
+
+| Método | Endpoint | Função |
+|--------|----------|--------|
+| GET | /enderecos/cep/{cep} | Consulta endereço pelo CEP |
+| GET | /enderecos/cep/{cep}/formatado | Retorna endereço formatado |
+
+## Exemplos de JSON
+
+### Beneficiário
 
 ```json
 {
-  "idBeneficiario": 1,
   "nome": "Pedro Rodrigues",
   "email": "pedro@email.com",
   "cpf": "12345678901",
@@ -88,21 +207,10 @@ http://localhost:8080/q/swagger-ui
 }
 ```
 
-## Exemplo de Caso
+### Dentista
 
 ```json
 {
-  "idCaso": 1,
-  "beneficiario": { "idBeneficiario": 1 },
-  "integrante": { "idIntegrante": 1 }
-}
-```
-
-## Exemplo de Dentista
-
-```json
-{
-  "idDentista": 1,
   "nome": "Dra. Ana Souza",
   "email": "ana@email.com",
   "cro": "CROSP12345",
@@ -112,104 +220,61 @@ http://localhost:8080/q/swagger-ui
 }
 ```
 
-## Banco de dados
+### Patrocinador
 
-O script SQL está em:
-
-```text
-src/main/resources/db/schema.sql
+```json
+{
+  "nome": "Empresa XYZ",
+  "email": "contato@xyz.com",
+  "cpfCnpj": "47274841882000",
+  "telefone": "11947595716",
+  "senha": "123456"
+}
 ```
 
-## Camada Service
+### Caso
 
-A camada `services` foi adicionada para deixar o projeto mais parecido com a base do professor e separar melhor as responsabilidades.
-
-Fluxo usado no projeto:
-
-```text
-Resource -> Service -> BO -> DAO -> Banco de Dados
+```json
+{
+  "beneficiario": { "idBeneficiario": 1 },
+  "integrante": { "idIntegrante": 1 }
+}
 ```
 
-- `Resource`: recebe as chamadas REST.
-- `Service`: centraliza as chamadas usadas pela API.
-- `BO`: valida e aplica as regras de negócio.
-- `DAO`: executa os comandos SQL no Oracle.
-- `Entity`: representa os dados do sistema.
+### Diagnóstico
 
-
-## Retorno com dados relacionados
-
-Os endpoints que possuem relacionamento agora retornam os objetos completos, não apenas o ID.
-
-Exemplos:
-
-- `/casos` retorna beneficiário, dentista e integrante preenchidos.
-- `/pedidos-encaminhamento` retorna caso e dentista preenchidos.
-- `/doacoes` retorna patrocinador preenchido.
-- `/evidencias` retorna beneficiário e caso preenchidos.
-- `/diagnosticos`, `/historicos-status` e `/mensagens` também retornam os relacionamentos principais.
-
-Isso foi ajustado na camada DAO usando buscas auxiliares de relacionamento, evitando respostas com vários campos `null` quando o registro relacionado existe no banco.
-
-Também foi ajustado para que os endpoints de cadastro e atualização dessas classes retornem o registro recarregado do banco, já com os relacionamentos preenchidos. Assim, no `POST` e no `PUT`, o retorno não fica apenas com o ID do objeto relacionado.
-
-## API ViaCEP
-
-A API ViaCEP foi incluída para consultar endereço pelo CEP e ajudar no preenchimento do endereço do beneficiário.
-
-| Método | Endpoint | Função |
-|---|---|---|
-| GET | / | Tela inicial da API com lista de endpoints |
-| GET | /enderecos/cep/{cep} | Consulta endereço no ViaCEP |
-| GET | /enderecos/cep/{cep}/formatado | Retorna endereço formatado |
-| PUT | /pedidos-encaminhamento/{id}/aceitar | Aceita pedido de encaminhamento |
-| PUT | /pedidos-encaminhamento/{id}/recusar | Recusa pedido de encaminhamento |
-
-Exemplo:
-
-```text
-GET http://localhost:8080/enderecos/cep/01001000
+```json
+{
+  "descricao": "Cárie severa",
+  "procedimento": "Extração",
+  "dataDiagnostico": "2026-05-24",
+  "caso": { "idCaso": 1 },
+  "dentista": { "idDentista": 1 }
+}
 ```
 
-## Classes de teste
+### Doação
 
-Também foram adicionadas classes simples de teste com `JOptionPane`, seguindo o estilo usado nas sprints anteriores.
-
-As classes ficam em:
-
-```text
-src/main/java/br/com/nuvemtech/main
+```json
+{
+  "tipo": "Equipamento",
+  "descricaoEquipamento": "Cadeira odontológica",
+  "dataDoacao": "2026-05-24",
+  "patrocinador": { "idPatrocinador": 1 }
+}
 ```
 
-Classes criadas:
+### Mensagem
 
-- `TesteConexao`
-- `TesteBeneficiario`
-- `TesteDentista`
-- `TesteCasoLogica`
-- `TesteViaCep`
-
-Essas classes servem para demonstrar testes manuais de conexão, cadastro, listagem, atualização, exclusão, regras de negócio e consulta de CEP.
-
-
-## Ajuste ViaCEP
-
-A consulta de endereço utiliza a API pública ViaCEP e retorna apenas os campos usados no projeto:
-
-- cep
-- logradouro
-- complemento
-- bairro
-- localidade
-- uf
-
-Exemplo:
-
-```http
-GET http://localhost:8080/enderecos/cep/01001000
+```json
+{
+  "texto": "Paciente agendado.",
+  "remetente": "integrante",
+  "caso": { "idCaso": 1 }
+}
 ```
 
-Retorno esperado:
+### Endereço (resposta ViaCEP)
 
 ```json
 {
@@ -222,8 +287,16 @@ Retorno esperado:
 }
 ```
 
-Também existe um endpoint para retornar uma versão resumida:
+## Classes de teste
 
-```http
-GET http://localhost:8080/enderecos/cep/01001000/formatado
+Classes simples com `JOptionPane` para demonstração manual, em:
+
 ```
+src/main/java/br/com/nuvemtech/main
+```
+
+- `TesteConexao` - testa a conexão com o banco
+- `TesteBeneficiario` - cadastro, listagem, atualização e exclusão
+- `TesteDentista` - cadastro e listagem
+- `TesteCasoLogica` - regras de negócio de caso
+- `TesteViaCep` - consulta de endereço por CEP
