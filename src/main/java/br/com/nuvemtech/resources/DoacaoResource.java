@@ -19,10 +19,33 @@ public class DoacaoResource {
         return service.selecionar();
     }
 
+    /**
+     * Busca uma doação pelo ID — funciona como link rastreável.
+     * Retorna: tipo, valor, descrição, data e dados do patrocinador.
+     * Exemplo: GET /doacoes/1
+     */
     @GET
     @Path("/{id}")
     public Doacao buscarPorId(@PathParam("id") int id) throws SQLException, ClassNotFoundException {
         return service.buscarPorId(id);
+    }
+
+    /**
+     * Lista todas as doações de um patrocinador específico.
+     * Permite ao patrocinador ver seu histórico completo de doações.
+     * Exemplo: GET /doacoes/patrocinador/1
+     */
+    @GET
+    @Path("/patrocinador/{idPatrocinador}")
+    public Response buscarPorPatrocinador(@PathParam("idPatrocinador") int idPatrocinador)
+            throws SQLException, ClassNotFoundException {
+        List<Doacao> lista = service.buscarPorPatrocinador(idPatrocinador);
+        if (lista.isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("{\"mensagem\": \"Nenhuma doacao encontrada para este patrocinador.\"}")
+                    .build();
+        }
+        return Response.ok(lista).build();
     }
 
     @POST
@@ -49,3 +72,4 @@ public class DoacaoResource {
         return Response.noContent().build();
     }
 }
+

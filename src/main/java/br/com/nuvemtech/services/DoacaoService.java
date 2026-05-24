@@ -27,4 +27,8 @@ public class DoacaoService {
     public void deletar(int id) throws SQLException, ClassNotFoundException {
         bo.deletarBo(id);
     }
+
+    public List<Doacao> buscarPorPatrocinador(int idPatrocinador) throws SQLException, ClassNotFoundException {
+        return bo.buscarPorPatrocinadorBo(idPatrocinador);
+    }
 }

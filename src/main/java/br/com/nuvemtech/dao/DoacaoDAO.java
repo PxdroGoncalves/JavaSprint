@@ -82,6 +82,19 @@ public class DoacaoDAO {
         return lista;
     }
 
+    public List<Doacao> buscarPorPatrocinador(int idPatrocinador) throws SQLException, ClassNotFoundException {
+        List<Doacao> lista = new ArrayList<>();
+        String sql = "SELECT * FROM doacao WHERE fk_patrocinador_id_patr = ? ORDER BY dt_doac DESC";
+        try (Connection conexao = abrirConexao();
+             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.setInt(1, idPatrocinador);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) lista.add(montar(conexao, rs));
+            }
+        }
+        return lista;
+    }
+
     private Doacao montar(Connection conexao, ResultSet rs) throws SQLException {
         Doacao d = new Doacao();
         d.setIdDoacao(rs.getInt("id_doac"));

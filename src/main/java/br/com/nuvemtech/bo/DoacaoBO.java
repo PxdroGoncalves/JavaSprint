@@ -37,6 +37,10 @@ public class DoacaoBO {
         new DoacaoDAO().deletar(id);
     }
 
+    public List<Doacao> buscarPorPatrocinadorBo(int idPatrocinador) throws SQLException, ClassNotFoundException {
+        return new DoacaoDAO().buscarPorPatrocinador(idPatrocinador);
+    }
+
     private void validarDados(Doacao d) {
         if (d == null) throw new RegraNegocioException("Dados da doacao nao informados.");
         if (d.getTipo() == null || d.getTipo().isBlank()) throw new RegraNegocioException("Tipo da doacao obrigatorio.");
