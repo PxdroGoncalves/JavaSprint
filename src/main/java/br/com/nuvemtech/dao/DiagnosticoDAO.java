@@ -25,14 +25,27 @@ public class DiagnosticoDAO {
 
         d.setIdDiagnostico(novoId);
 
-        String sql = "INSERT INTO diagnostico (id_diag, dt_diag, ds_diagnostico, ds_procedimento, fk_caso_id_caso) VALUES (?, ?, ?, ?, ?)";
+        // Busca o beneficiário pelo caso para preencher a FK obrigatória
+        int idBeneficiario;
+        String sqlBene = "SELECT fk_beneficiario_id_bene FROM caso WHERE id_caso = ?";
+        try (Connection conexao = abrirConexao();
+             PreparedStatement stmt = conexao.prepareStatement(sqlBene)) {
+            stmt.setInt(1, d.getCaso().getIdCaso());
+            try (ResultSet rs2 = stmt.executeQuery()) {
+                if (!rs2.next()) throw new SQLException("Caso nao encontrado: " + d.getCaso().getIdCaso());
+                idBeneficiario = rs2.getInt(1);
+            }
+        }
+
+        String sql = "INSERT INTO diagnostico (id_diag, dt_diag, ds_diagnostico, ds_procedimento, fk_caso_id_caso, fk_beneficiario_id_bene) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conexao = abrirConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, novoId);
             stmt.setDate(2, Date.valueOf(d.getDataDiagnostico()));
             stmt.setString(3, d.getDescricao());
-            stmt.setString(4, d.getProcedimento());   
+            stmt.setString(4, d.getProcedimento());
             stmt.setInt(5, d.getCaso().getIdCaso());
+            stmt.setInt(6, idBeneficiario);
             stmt.executeUpdate();
         }
     }
