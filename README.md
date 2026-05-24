@@ -54,6 +54,13 @@ Para testar os endpoints pelo Swagger:
 http://localhost:8080/q/swagger-ui
 ```
 
+## Acesso Online
+
+- **Front-end (Vercel):** [nuvem-do-bem-react.vercel.app](https://nuvem-do-bem-react.vercel.app)
+- **API REST (Render):** [javasprint.onrender.com](https://javasprint.onrender.com)
+
+> A API no Render pode demorar até 30 segundos na primeira requisição (plano gratuito hiberna após inatividade).
+
 ## Endpoints
 
 ### Geral
